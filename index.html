@@ -3,9 +3,26 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>Courslan - Responsive Cyberpunk Catalog</title>
     
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <title>Courslan Academy: HTML FOUNDATION</title>
+    <meta name="title" content="HTML FOUNDATION ; PRESENTATION MODULES | Courslan Academy">
+    <meta name="description" content="Akses dan pelajari modul presentasi lengkap HTML Foundation. Dirancang khusus untuk memahami konsep web development secara terstruktur.">
+    <meta name="author" content="Courslan Academy">
+    <meta name="theme-color" content="#ff6600">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://courslan.com/"> <meta property="og:title" content="HTML FOUNDATION ; PRESENTATION MODULES | Courslan Academy">
+    <meta property="og:description" content="Akses dan pelajari modul presentasi lengkap HTML Foundation. Dirancang khusus untuk memahami konsep web development secara terstruktur.">
+    <meta property="og:image" content="https://domain-kamu.com/metadata.png"> 
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Courslan Academy">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://courslan.com/">
+    <meta property="twitter:title" content="HTML FOUNDATION ; PRESENTATION MODULES | Courslan Academy">
+    <meta property="twitter:description" content="Akses dan pelajari modul presentasi lengkap HTML Foundation. Dirancang khusus untuk memahami konsep web development secara terstruktur.">
+    <meta property="twitter:image" content="https://domain-kamu.com/metadata.png"> <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
@@ -32,7 +49,7 @@
     </script>
 
     <style>
-        /* Reset & penguncian overflow agar tidak bisa digeser ke samping (horizontal scroll fix) */
+        /* Reset & penguncian overflow */
         html, body { 
             background-color: #050302 !important; 
             color: #f8fafc;
@@ -48,7 +65,7 @@
             background-image: 
                 linear-gradient(rgba(255, 102, 0, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 102, 0, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px; /* Diperkecil sedikit agar lebih manis di mobile */
+            background-size: 30px 30px; 
             background-position: center top;
         }
         
@@ -70,7 +87,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        @media (hover: hover) { /* Hover effect hanya jalan di device yang punya kursor/mouse */
+        @media (hover: hover) { 
             .cyber-glow-panel:hover {
                 border-color: rgba(255, 102, 0, 0.8);
                 box-shadow: 0 0 25px rgba(255, 102, 0, 0.2), inset 0 0 15px rgba(255, 102, 0, 0.05);
@@ -130,12 +147,11 @@
 
     <footer class="mt-auto py-6 sm:py-8 border-t border-neon-primary/10 bg-cyber-bg/90">
         <div class="max-w-[1280px] mx-auto px-4 sm:px-6 text-center text-[10px] sm:text-xs font-mono text-text-muted/50">
-            <p>TERMINAL INITIATED // COURSLAN © 2026</p>
+            <p>TERMINAL INITIATED // COURSLAN ACADEMY © 2026</p>
         </div>
     </footer>
 
     <script>
-        // Data Modul yang sepenuhnya aman dengan entitas HTML (&lt; dan &gt;)
         const modulesData = [
             {
                 "id": "MOD_01",
@@ -178,7 +194,6 @@
 
         modulesData.forEach(mod => {
             if (!mod.isLocked) {
-                // p-5 untuk mobile, sm:p-6 untuk layar lebih besar
                 container.innerHTML += `
                     <div class="p-5 sm:p-6 flex flex-col h-full cyber-glow-panel group">
                         <div class="text-neon-primary font-mono text-[10px] sm:text-xs font-bold tracking-widest mb-2 sm:mb-3 glow-text">
