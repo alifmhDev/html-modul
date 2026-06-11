@@ -1,0 +1,626 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courslan Academy: HTML Lists & Tables (Modul 3)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CORE SYSTEM SETUP - UX & 16:9 OPTIMIZED */
+        :root {
+            --bg-color: #080808; 
+            --panel-bg: #121212;
+            --accent-green: #00FF41;
+            --accent-html: #9900FF;   /* Structured Purple for Modul 3 */
+            --accent-dim: #1a0033;
+            --accent-blue: #00CCFF;   /* Brand Logo Color */
+            --accent-purple: #9900FF; /* Brand Logo Color */
+            --text-main: #F5F5F5; 
+            --text-muted: #B3B3B3; 
+            --font-title: 'Orbitron', sans-serif;
+            --font-code: 'Courier Prime', monospace;
+            
+            /* Syntax Highlighting */
+            --syn-tag: #569CD6;
+            --syn-attr: #9CDCFE;
+            --syn-string: #CE9178;
+            --syn-text: #E0E0E0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #111;
+            color: var(--text-main);
+            font-family: var(--font-code);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 16:9 ASPECT RATIO CONTAINER */
+        .slide-container {
+            width: 100vw;
+            max-width: calc(100vh * 16 / 9);
+            height: calc(100vw * 9 / 16);
+            max-height: 100vh;
+            container-type: inline-size;
+            overflow-x: auto;
+            display: flex;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .slide-container::-webkit-scrollbar { display: none; }
+
+        .slide {
+            min-width: 100cqw;
+            max-width: 100cqw;
+            height: 100%;
+            scroll-snap-align: start;
+            background-color: var(--bg-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 4cqw 6cqw;
+            overflow: hidden;
+        }
+
+        /* Ambient Cyber Effect */
+        .slide::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(153, 0, 255, 0.02), rgba(0, 255, 65, 0.01));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* TYPOGRAPHY */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--accent-html);
+            padding-bottom: 1.5cqw;
+            margin-bottom: 2.5cqw;
+            z-index: 2;
+        }
+
+        .system-tag { color: var(--accent-html); font-size: 1.3cqw; text-transform: uppercase; letter-spacing: 0.1cqw; font-weight: bold; }
+        .node-id { color: var(--text-muted); font-size: 1.2cqw; }
+
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8cqw;
+            font-size: 1.2cqw;
+        }
+
+        .logo-icon {
+            width: 2.5cqw;
+            height: 2.5cqw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: var(--font-title);
+            font-weight: 900;
+            color: var(--accent-green);
+            letter-spacing: 0.1cqw;
+            text-transform: uppercase;
+        }
+
+        h1 { font-family: var(--font-title); font-size: 5cqw; font-weight: 900; color: var(--accent-html); text-shadow: 0 0 15px rgba(153, 0, 255, 0.3); line-height: 1.2; }
+        h2.slide-title { font-family: var(--font-title); font-size: 3cqw; margin-bottom: 1.5cqw; color: #fff; line-height: 1.3; border-left: 0.5cqw solid var(--accent-html); padding-left: 1.5cqw; }
+        h2.slide-title span { color: var(--accent-html); }
+        
+        .subtitle { font-size: 1.6cqw; color: var(--text-muted); letter-spacing: 0.2cqw; text-transform: uppercase; margin-bottom: 2cqw; }
+        p.desc { font-size: 1.5cqw; color: #E0E0E0; line-height: 1.7; margin-bottom: 2cqw; }
+
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 2; position: relative; }
+
+        /* LAYOUTS */
+        .tiled-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2cqw; width: 100%; }
+        .tile { background-color: var(--panel-bg); border: 1px solid #222; padding: 2cqw; border-radius: 0.5cqw; transition: 0.3s; height: 100%; }
+        .tile:hover { border-color: var(--accent-html); box-shadow: 0 0 15px rgba(153, 0, 255, 0.1); transform: translateY(-0.3cqw); }
+        .tile .icon { font-size: 2.5cqw; color: var(--accent-html); margin-bottom: 1cqw; }
+        .tile h3 { font-family: var(--font-title); font-size: 1.4cqw; margin-bottom: 0.8cqw; color: #fff; }
+        .tile p { font-size: 1.2cqw; color: var(--text-muted); line-height: 1.5; }
+
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4cqw; align-items: center; }
+        
+        /* Terminal & Code Boxes */
+        .terminal-box { background-color: var(--panel-bg); border: 1px solid #222; border-left: 0.6cqw solid var(--accent-html); padding: 2cqw; border-radius: 0.5cqw; font-family: var(--font-code); line-height: 1.8; }
+        .terminal-header { font-size: 1.2cqw; color: var(--accent-html); border-bottom: 1px solid rgba(153, 0, 255, 0.2); padding-bottom: 1cqw; margin-bottom: 1.5cqw; display: flex; justify-content: space-between; font-weight: bold; }
+        
+        .code-block { font-size: 1.3cqw; line-height: 1.7; background: #050505; padding: 1.5cqw 2cqw; border-radius: 0.4cqw; border: 1px solid #222; overflow-x: auto; word-break: break-word; max-width: 100%; }
+
+        /* TABLE LAYOUT FOR DATA MATERIAL */
+        .demo-table { width: 100%; border-collapse: collapse; margin-top: 1cqw; background: #000; }
+        .demo-table th, .demo-table td { border: 1px solid #333; padding: 1cqw 1.5cqw; font-size: 1.2cqw; text-align: left; }
+        .demo-table th { background: var(--panel-bg); color: var(--accent-html); font-family: var(--font-title); }
+
+        /* STATUS BAR & NAVIGATION */
+        .status-bar { border-top: 1px dashed #333; padding-top: 1.5cqw; margin-top: auto; display: flex; justify-content: space-between; font-size: 1.1cqw; color: var(--text-muted); text-transform: uppercase; z-index: 2; font-weight: bold; }
+        .status-blink { width: 0.8cqw; height: 0.8cqw; background: var(--accent-html); border-radius: 50%; animation: blink-status 1.5s infinite; display: inline-block; margin-right: 0.8cqw; }
+        @keyframes blink-status { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        .nav-btn-container { position: absolute; top: 50%; width: 100%; left: 0; display: flex; justify-content: space-between; padding: 0 2cqw; z-index: 100; pointer-events: none; transform: translateY(-50%); }
+        .nav-btn { background: rgba(10,10,10,0.9); color: var(--accent-html); border: 1px solid var(--accent-dim); padding: 1cqw 1.5cqw; pointer-events: auto; text-decoration: none; font-size: 1.5cqw; border-radius: 0.3cqw; transition: 0.3s; }
+        .nav-btn:hover { background: var(--accent-html); color: #000; }
+
+        /* CTA BUTTON */
+        .cta-button { display: inline-block; font-family: var(--font-title); border: 2px solid var(--accent-green); color: var(--accent-green); background: rgba(0, 255, 65, 0.05); padding: 1.5cqw 4cqw; font-size: 1.8cqw; font-weight: bold; text-decoration: none; border-radius: 0.4cqw; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); } 50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); } }
+
+        .highlight-box { color: var(--accent-html); background: rgba(153,0,255,0.1); padding: 0.1cqw 0.4cqw; border-radius: 0.2cqw; font-weight: bold; }
+
+        /* Glitch Effect */
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: -1; }
+        .glitch-text::before { left: 1px; text-shadow: -1px 0 var(--accent-html); animation: glitch-anim-1 3s infinite linear alternate-reverse; }
+        .glitch-text::after { left: -1px; text-shadow: -1px 0 var(--accent-green); animation: glitch-anim-2 4s infinite linear alternate-reverse; }
+        @keyframes glitch-anim-1 { 0% { clip-path: inset(20% 0 80% 0); } 20% { clip-path: inset(60% 0 10% 0); } 40% { clip-path: inset(40% 0 50% 0); } 60% { clip-path: inset(80% 0 5% 0); } 80% { clip-path: inset(10% 0 70% 0); } 100% { clip-path: inset(30% 0 20% 0); } }
+        @keyframes glitch-anim-2 { 0% { clip-path: inset(10% 0 60% 0); } 20% { clip-path: inset(30% 0 20% 0); } 40% { clip-path: inset(70% 0 10% 0); } 60% { clip-path: inset(20% 0 50% 0); } 80% { clip-path: inset(50% 0 30% 0); } 100% { clip-path: inset(5% 0 80% 0); } }
+        
+        .cyber-ring-container { width: 15cqw; height: 15cqw; position: relative; display: flex; align-items: center; justify-content: center; }
+        .ring-svg { position: absolute; width: 100%; height: 100%; animation: cyber-spin 12s linear infinite; }
+        .logo-inner { width: 75%; height: 75%; display: flex; align-items: center; justify-content: center; z-index: 5; }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <div class="slide" id="slide1">
+        <div class="nav-btn-container" style="justify-content: flex-end;">
+            <a href="#slide2" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ MODUL 3: DATA_STRUCTURING ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-01</div>
+        </div>
+        <div class="content-area" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+            <i class="fa-solid fa-table-list" style="font-size: 8cqw; color: var(--accent-html); margin-bottom: 1.5cqw; text-shadow: 0 0 20px rgba(153, 0, 255, 0.3);"></i>
+            <h1 class="glitch-text" data-text="LISTS & TABLES">LISTS & TABLES</h1>
+            <p style="font-size: 1.6cqw; color: var(--text-muted); margin-top: 1cqw; letter-spacing: 0.2cqw;">MODUL 3: MANAJEMEN DATA TERSTRUKTUR</p>
+            
+            <div class="terminal-box" style="margin-top: 3cqw; width: 65%; text-align: left;">
+                <p style="color: var(--accent-html); font-size: 1.3cqw; line-height: 1.8;">
+                    > Mengaktifkan sub-sistem pengorganisasian data...<br>
+                    > Memetakan implementasi matriks tabel dan list berurutan...<br>
+                    > Status: Ready to structure unstructured chaos.
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SYSTEM_READY</div><div>01 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide2">
+        <div class="nav-btn-container">
+            <a href="#slide1" class="nav-btn">&lt;</a><a href="#slide3" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ KNOWLEDGE_BASE: UX_STRUCTURE ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-02</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>01 //</span> Seni Merapikan Informasi</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Teks paragraf panjang sangat buruk untuk menyampaikan poin penting. Pengguna web modern cenderung melakukan <i>scanning</i> cepat saat membaca halaman.</p>
+                    <p class="desc">HTML menyediakan elemen <b>Lists</b> (Daftar) dan <b>Tables</b> (Tabel) untuk memecah data padat menjadi informasi yang ringkas, teratur, dan mudah dipahami dalam hitungan detik.</p>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--text-muted);">
+                    <div class="terminal-header"><span style="color: var(--text-muted);">UX_DEVELOPMENT_LOG</span><span style="color: var(--text-muted);">OPTIMIZED</span></div>
+                    <ul style="padding-left: 2cqw; font-size: 1.2cqw; line-height: 1.8; color: #fff;">
+                        <li><span style="color: var(--accent-html);">[+] List:</span> Cocok untuk langkah instruksi atau fitur produk.</li>
+                        <li><span style="color: var(--accent-html);">[+] Tabel:</span> Senjata terbaik untuk perbandingan harga, jadwal, dan matriks data.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>PARSING_LAYOUT_ALGORITHMS</div><div>02 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide3">
+        <div class="nav-btn-container">
+            <a href="#slide2" class="nav-btn">&lt;</a><a href="#slide4" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYNTAX: UNORDERED_LIST ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-03</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>02 //</span> Unordered List &lt;ul&gt;</h2>
+            <p class="desc">Gunakan <span class="highlight-box">&lt;ul&gt;</span> jika poin-poin yang Anda tampilkan bersifat acak dan urutannya bisa ditukar tanpa merubah arti (menggunakan simbol <i>bullet</i>).</p>
+            
+            <div class="split-layout">
+                <div class="code-block" style="font-size: 1.2cqw;">
+                    <span style="color: var(--syn-tag);">&lt;ul&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;li&gt;</span>Vue.js (Frontend)<span style="color: var(--syn-tag);">&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;li&gt;</span>Node.js (Backend)<span style="color: var(--syn-tag);">&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;li&gt;</span>Cybersecurity<span style="color: var(--syn-tag);">&lt;/li&gt;</span><br>
+                    <span style="color: var(--syn-tag);">&lt;/ul&gt;</span>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--accent-blue);">
+                    <div class="terminal-header"><span>VISUAL OUTPUT IN BROWSER</span></div>
+                    <ul style="padding-left: 2.5cqw; font-size: 1.4cqw; line-height: 2;">
+                        <li>Vue.js (Frontend)</li>
+                        <li>Node.js (Backend)</li>
+                        <li>Cybersecurity</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="font-size: 1.2cqw; margin-top: 1.5cqw; color: var(--text-muted);">Setiap item di dalam daftar wajib dibungkus menggunakan tag <span class="highlight-box">&lt;li&gt;</span> (List Item).</p>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>BULLET_ENGINE_ACTIVE</div><div>03 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide4">
+        <div class="nav-btn-container">
+            <a href="#slide3" class="nav-btn">&lt;</a><a href="#slide5" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYNTAX: ORDERED_LIST ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-04</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>03 //</span> Ordered List &lt;ol&gt;</h2>
+            <p class="desc">Gunakan tag <span class="highlight-box">&lt;ol&gt;</span> jika urutan poin sangat krusial dan tidak boleh tertukar (otomatis menghasilkan angka atau abjad urutan).</p>
+            
+            <div class="split-layout">
+                <div class="code-block" style="font-size: 1.2cqw;">
+                    <span style="color: var(--syn-tag);">&lt;ol&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;li&gt;</span>Pelajari Dasar HTML<span style="color: var(--syn-tag);">&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;li&gt;</span>Gunakan CSS Styling<span style="color: var(--syn-tag);">&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;li&gt;</span>Online-kan Website<span style="color: var(--syn-tag);">&lt;/li&gt;</span><br>
+                    <span style="color: var(--syn-tag);">&lt;/ol&gt;</span>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--accent-green);">
+                    <div class="terminal-header"><span>VISUAL OUTPUT IN BROWSER</span></div>
+                    <ol style="padding-left: 2.5cqw; font-size: 1.4cqw; line-height: 2;">
+                        <li>Pelajari Dasar HTML</li>
+                        <li>Gunakan CSS Styling</li>
+                        <li>Online-kan Website</li>
+                    </ol>
+                </div>
+            </div>
+            <p style="font-size: 1.2cqw; margin-top: 1.5cqw; color: var(--text-muted);">
+                <b>Tips Pro:</b> Anda bisa menambahkan atribut <code>type="A"</code> atau <code>type="I"</code> pada tag <code>&lt;ol&gt;</code> untuk mengganti urutan angka menjadi huruf kapital atau angka romawi.
+            </p>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SEQUENCE_GENERATOR_LOADED</div><div>04 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <div class="nav-btn-container">
+            <a href="#slide4" class="nav-btn">&lt;</a><a href="#slide6" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ TABLES: CORE_MATRIX ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-05</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>04 //</span> Anatomi Dasar Tabel</h2>
+            <p class="desc">Membuat matriks data dua dimensi membutuhkan kombinasi tiga tag inti HTML: <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, dan <code>&lt;td&gt;</code>.</p>
+            
+            <div class="split-layout" style="align-items: stretch;">
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="code-block" style="font-size: 1.15cqw;">
+                        <span style="color: var(--syn-tag);">&lt;table&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;tr&gt;</span> <span style="color: #6A9955;"></span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;td&gt;</span>Arslan<span style="color: var(--syn-tag);">&lt;/td&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;td&gt;</span>Web Dev<span style="color: var(--syn-tag);">&lt;/td&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/tr&gt;</span><br>
+                        <span style="color: var(--syn-tag);">&lt;/table&gt;</span>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 1.5cqw;">
+                    <div style="background: rgba(255,255,255,0.03); padding: 1.2cqw; border: 1px solid #222; border-radius: 0.3cqw; font-size: 1.2cqw;">
+                        <span class="highlight-box">&lt;table&gt;</span> : Pembungkus utama seluruh area matriks tabel.
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); padding: 1.2cqw; border: 1px solid #222; border-radius: 0.3cqw; font-size: 1.2cqw;">
+                        <span class="highlight-box">&lt;tr&gt;</span> : <b>Table Row</b>. Berfungsi menciptakan satu baris horizontal baru.
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); padding: 1.2cqw; border: 1px solid #222; border-radius: 0.3cqw; font-size: 1.2cqw;">
+                        <span class="highlight-box">&lt;td&gt;</span> : <b>Table Data</b>. Berfungsi membuat sel data kolom vertikal di dalam baris.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>MATRIX_ELEMENTS_COMPILED</div><div>05 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide6">
+        <div class="nav-btn-container">
+            <a href="#slide5" class="nav-btn">&lt;</a><a href="#slide7" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ TABLES: HEADERS ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-06</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>05 //</span> Menambahkan Header &lt;th&gt;</h2>
+            <p class="desc">Sebuah tabel profesional wajib memiliki kepala kolom yang jelas agar data mudah dibaca. Kita mengganti tag <code>&lt;td&gt;</code> pada baris pertama dengan tag <span class="highlight-box">&lt;th&gt;</span> (Table Header).</p>
+            
+            <div class="code-block" style="font-size: 1cqw; line-height: 1.4; margin-bottom: 1.5cqw; padding: 1cqw 1.5cqw;">
+                <span style="color: var(--syn-tag);">&lt;table&gt;</span><br>
+                &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;tr&gt;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;th&gt;</span>Nama Kelas<span style="color: var(--syn-tag);">&lt;/th&gt;</span> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;th&gt;</span>Tipe Akses<span style="color: var(--syn-tag);">&lt;/th&gt;</span><br>
+                &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/tr&gt;</span><br>
+                &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;tr&gt;</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;td&gt;</span>HTML Fundamental<span style="color: var(--syn-tag);">&lt;/td&gt;</span> &nbsp;<span style="color: var(--syn-tag);">&lt;td&gt;</span>Gratis (Rutinan)<span style="color: var(--syn-tag);">&lt;/td&gt;</span><br>
+                &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/tr&gt;</span><br>
+                <span style="color: var(--syn-tag);">&lt;/table&gt;</span>
+            </div>
+            <p style="font-size: 1.25cqw; color: var(--text-muted);">
+                <b>Kelebihan &lt;th&gt;:</b> Browser secara otomatis akan membuat teks di dalam elemen ini menjadi <b>bercetak tebal (Bold)</b> dan diposisikan tepat di <b>tengah sel (Centered)</b> secara default tanpa CSS.
+            </p>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>RENDER_HIERARCHY_OK</div><div>06 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide7">
+        <div class="nav-btn-container">
+            <a href="#slide6" class="nav-btn">&lt;</a><a href="#slide8" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ TABLES: LIVE_PREVIEW ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-07</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>06 //</span> Visualisasi Matriks Tabel</h2>
+            <p class="desc">Berikut adalah gambaran output visual data di dalam browser ketika Anda menyusun struktur baris dan kolom secara tepat:</p>
+            
+            <table class="demo-table">
+                <thead>
+                    <tr>
+                        <th>ID Modul</th>
+                        <th>Topik Utama Pembelajaran</th>
+                        <th>Target Kapasitas Kompetensi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CSL-HTML-01</td>
+                        <td>Dasar & Anatomi Web</td>
+                        <td>Memahami parsing browser, boilerplate wajib, & tag tipografi</td>
+                    </tr>
+                    <tr>
+                        <td>CSL-HTML-02</td>
+                        <td>Navigasi & Aset Visual</td>
+                        <td>Menguasai manajemen path link, audit gambar alt, & player media</td>
+                    </tr>
+                    <tr>
+                        <td>CSL-HTML-03</td>
+                        <td>Manajemen Data Terstruktur</td>
+                        <td>Mampu merapikan hierarki informasi via list & database matriks</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>DATAGRID_COMPILED_STABLE</div><div>07 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide8">
+        <div class="nav-btn-container">
+            <a href="#slide7" class="nav-btn">&lt;</a><a href="#slide9" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ TABLES: ADVANCED_CELLS ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-08</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>07 //</span> Menggabungkan Sel: Spanning</h2>
+            <p class="desc">Sama seperti fitur *Merge Cells* pada Microsoft Excel, HTML memiliki dua atribut andalan untuk menggabungkan beberapa sel menjadi satu kesatuan.</p>
+            
+            <div class="split-layout">
+                <div class="terminal-box" style="border-left-color: var(--accent-blue);">
+                    <div class="terminal-header"><span>colspan (Mendatar / Horisontal)</span></div>
+                    <p style="font-size: 1.15cqw; color: var(--text-muted); margin-bottom: 1cqw;">Menggabungkan beberapa kolom menjadi satu baris sel besar.</p>
+                    <div class="code-block" style="font-size: 1.1cqw;">
+                        <span style="color: var(--syn-tag);">&lt;td</span> <span style="color: var(--syn-attr);">colspan</span>=<span style="color: var(--syn-string);">"2"</span><span style="color: var(--syn-tag);">&gt;</span>Gabung 2 Kolom<span style="color: var(--syn-tag);">&lt;/td&gt;</span>
+                    </div>
+                </div>
+                
+                <div class="terminal-box" style="border-left-color: var(--accent-purple);">
+                    <div class="terminal-header"><span>rowspan (Tegak / Vertikal)</span></div>
+                    <p style="font-size: 1.15cqw; color: var(--text-muted); margin-bottom: 1cqw;">Menggabungkan beberapa baris ke bawah menjadi satu kolom sel tinggi.</p>
+                    <div class="code-block" style="font-size: 1.1cqw;">
+                        <span style="color: var(--syn-tag);">&lt;td</span> <span style="color: var(--syn-attr);">rowspan</span>=<span style="color: var(--syn-string);">"2"</span><span style="color: var(--syn-tag);">&gt;</span>Gabung 2 Baris<span style="color: var(--syn-tag);">&lt;/td&gt;</span>
+                    </div>
+                </div>
+            </div>
+            <p style="font-size: 1.15cqw; margin-top: 1.5cqw; color: var(--text-muted);">*Peringatan:* Saat menggunakan spanning, Anda harus menghapus tag <code>&lt;td&gt;</code> tetangga yang tergeser agar struktur tabel tidak rusak mencuat keluar.</p>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>CELL_SPANNING_RESOLVED</div><div>08 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide9">
+        <div class="nav-btn-container">
+            <a href="#slide8" class="nav-btn">&lt;</a><a href="#slide10" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ MODULE_SUMMARY ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-09</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Kesimpulan Modul 3</h2>
+            <div class="tiled-content">
+                <div class="tile">
+                    <i class="fa-solid fa-list-ul icon"></i>
+                    <h3>Lists Hierarchy</h3>
+                    <p style="font-size: 1.15cqw;">Gunakan `&lt;ul&gt;` untuk poin acak dinamis, dan gunakan `&lt;ol&gt;` untuk urutan sekuensial yang pasti.</p>
+                </div>
+                <div class="tile">
+                    <i class="fa-solid fa-table icon"></i>
+                    <h3>Grid Matrix</h3>
+                    <p style="font-size: 1.15cqw;">Tabel disusun baris demi baris menggunakan `&lt;tr&gt;` sebelum membaginya menjadi sel kolom data lewat `&lt;td&gt;` atau `&lt;th&gt;`.</p>
+                </div>
+                <div class="tile">
+                    <i class="fa-solid fa-compress icon"></i>
+                    <h3>Data Spanning</h3>
+                    <p style="font-size: 1.15cqw;">Atribut `colspan` dan `rowspan` adalah kunci kustomisasi tingkat lanjut untuk menyatukan ruang data yang terpisah.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>DATA_INTEGRITY_CHECK: PASS</div><div>09 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide10">
+        <div class="nav-btn-container">
+            <a href="#slide9" class="nav-btn">&lt;</a><a href="#slide11" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ PRACTICAL_LAB: LAB_EXE ]</div>
+            <div class="node-id">ARCHIVE: HTML-M3-10</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Micro-Lab 03: Arsitektur Jadwal Kelas</h2>
+            <div class="terminal-box" style="width: 100%;">
+                <div class="terminal-header">
+                    <span>► INTERACTIVE_LAB: INITIATE_DATA_COMPILATION</span>
+                </div>
+                <p style="font-size: 1.35cqw; color: #fff; line-height: 1.9;">
+                    1. Buka kembali berkas kodingan induk Anda di VS Code.<br>
+                    2. Buat berkas halaman baru dengan penamaan tautan lokal <span class="highlight-box">jadwal.html</span>.<br>
+                    3. Buat sebuah tabel utuh yang memuat rancangan 3 Kolom: <b>Hari, Nama Modul,</b> dan <b>Waktu Belajar</b>.<br>
+                    4. Di baris kepala tabel, manfaatkan tag elemen <code>&lt;th&gt;</code> agar keterbacaan data kolom terlihat tebal otomatis.<br>
+                    5. Masukkan minimal 3 baris data kelas Courslan Anda ke dalam tabel memanfaatkan koordinat baris dan kolom yang tepat.<br>
+                    6. Di bawah tabel, implementasikan sebuah <code>&lt;ul&gt;</code> yang mendaftar 3 perlengkapan wajib belajar otodidak Anda (misal: Koneksi Internet, Handphone Termux, VS Code).
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>AWAITING_STUDENT_COMPILATION</div><div>10 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide11">
+        <div class="nav-btn-container" style="justify-content: flex-start;">
+            <a href="#slide10" class="nav-btn">&lt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYSTEM: MODULE_COMPLETED ]</div>
+            <div class="node-id">NODE_ID: CSL-END-03</div>
+        </div>
+        
+        <div class="content-area">
+            <div class="split-layout">
+                
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="width: 15cqw; height: 15cqw; border: 0.4cqw solid var(--accent-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 3cqw rgba(0, 204, 255, 0.25); background-color: #000;">
+                        <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" style="width: 75%; height: 75%; object-fit: contain; position: relative; z-index: 5;">
+                        <svg style="position: absolute; width: 19cqw; height: 19cqw; top: -2.4cqw; left: -2.4cqw; animation: cyber-spin 12s linear infinite; pointer-events: none; z-index: 2;" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="var(--accent-purple)" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.6"/>
+                            <circle cx="50" cy="2" r="3" fill="var(--accent-blue)" />
+                            <circle cx="84" cy="84" r="1.5" fill="var(--accent-purple)" />
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-title); font-size: 2.2cqw; margin-top: 2cqw; letter-spacing: 0.2cqw; color: #fff;">MODULE 03 COMPLETE</h3>
+                    <p style="font-size: 1.2cqw; color: var(--accent-blue); text-transform: uppercase; margin-top: 0.5cqw;">Next Level Locked</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 2cqw;">
+                    <div class="cta-container" style="text-align: left; margin-top: 0; margin-bottom: 1cqw;">
+                        <a href="#" class="cta-button">LANJUT KE MODUL 4</a>
+                    </div>
+                    
+                    <div class="terminal-box" style="margin-top: 0; width: 100%; border-left-color: var(--accent-green); padding: 2.5cqw;">
+                        <div class="terminal-header" style="color: var(--accent-green); border-bottom-color: rgba(0,255,65,0.1); padding-bottom: 0.8cqw; margin-bottom: 1cqw;">
+                            <span>► DATA_STRUCTURE_LOG</span>
+                            <span>STATUS: SUCCESS</span>
+                        </div>
+                        <p style="color: #E0E0E0; font-size: 1.2cqw; line-height: 1.7; font-family: var(--font-code);">
+                            Luar biasa! Seluruh pemahaman arsitektur pengorganisasian data menggunakan list dan visualisasi matriks tabel di Modul 3 telah sukses dikompilasi ke dalam sistem memori Anda.<br><br>
+                            <span style="color: var(--accent-green); font-weight: bold;">[+] ASSIGNMENT:</span> Selesaikan tantangan pembuatan tabel matriks pada Micro-Lab 03 sebelum melompat ke node petualangan berikutnya.<br>
+                            <span style="color: var(--accent-blue); font-weight: bold;">[+] STANDBY:</span> Sesi berikutnya (Modul 4) akan membawa kita naik tingkat secara masif untuk membedah interaktivitas pengumpulan data pengguna via <b>HTML Forms & Inputs</b>.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <div style="display: flex; align-items: center; gap: 1cqw;">
+                <div class="status-blink" style="background-color: var(--accent-green);"></div>
+                <span style="color: var(--accent-green);">PROGRESS_SAVED // DATA_INTEGRITY_VERIFIED</span>
+            </div>
+            <div>11 / 11</div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    @keyframes cyber-spin { 100% { transform: rotate(360deg); } }
+</style>
+
+</body>
+</html>
+

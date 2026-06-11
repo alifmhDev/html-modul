@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courslan Academy: HTML Links & Media (Modul 2)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CORE SYSTEM SETUP - UX & 16:9 OPTIMIZED */
+        :root {
+            --bg-color: #080808; 
+            --panel-bg: #121212;
+            --accent-green: #00FF41;
+            --accent-html: #FF5722; 
+            --accent-blue: #00CCFF;   
+            --accent-purple: #9900FF; 
+            --accent-dim: #1a0c02;
+            --text-main: #F5F5F5; 
+            --text-muted: #B3B3B3; 
+            --font-title: 'Orbitron', sans-serif;
+            --font-code: 'Courier Prime', monospace;
+            
+            /* Syntax Highlighting */
+            --syn-tag: #569CD6;
+            --syn-attr: #9CDCFE;
+            --syn-string: #CE9178;
+            --syn-text: #E0E0E0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #111;
+            color: var(--text-main);
+            font-family: var(--font-code);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 16:9 ASPECT RATIO CONTAINER */
+        .slide-container {
+            width: 100vw;
+            max-width: calc(100vh * 16 / 9);
+            height: calc(100vw * 9 / 16);
+            max-height: 100vh;
+            container-type: inline-size;
+            overflow-x: auto;
+            display: flex;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .slide-container::-webkit-scrollbar { display: none; }
+
+        .slide {
+            min-width: 100cqw;
+            max-width: 100cqw;
+            height: 100%;
+            scroll-snap-align: start;
+            background-color: var(--bg-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 4cqw 6cqw;
+            overflow: hidden;
+        }
+
+        /* Scanline Overlay */
+        .slide::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(0, 204, 255, 0.01), rgba(255, 87, 34, 0.02));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* TYPOGRAPHY */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--accent-blue);
+            padding-bottom: 1.5cqw;
+            margin-bottom: 2.5cqw;
+            z-index: 2;
+        }
+
+        .system-tag { color: var(--accent-blue); font-size: 1.3cqw; text-transform: uppercase; letter-spacing: 0.1cqw; font-weight: bold; }
+        .node-id { color: var(--text-muted); font-size: 1.2cqw; }
+
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8cqw;
+            font-size: 1.2cqw;
+        }
+
+        .logo-icon {
+            width: 2.5cqw;
+            height: 2.5cqw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: var(--font-title);
+            font-weight: 900;
+            color: var(--accent-blue);
+            letter-spacing: 0.1cqw;
+            text-transform: uppercase;
+        }
+
+        h1 { font-family: var(--font-title); font-size: 4.5cqw; font-weight: 900; color: var(--accent-blue); text-shadow: 0 0 15px rgba(0, 204, 255, 0.3); line-height: 1.2; }
+        h2.slide-title { font-family: var(--font-title); font-size: 3cqw; margin-bottom: 1.5cqw; color: #fff; line-height: 1.3; border-left: 0.5cqw solid var(--accent-blue); padding-left: 1.5cqw; }
+        h2.slide-title span { color: var(--accent-blue); }
+        
+        .subtitle { font-size: 1.6cqw; color: var(--text-muted); letter-spacing: 0.2cqw; text-transform: uppercase; margin-bottom: 2cqw; }
+        p.desc { font-size: 1.4cqw; color: #E0E0E0; line-height: 1.7; margin-bottom: 2cqw; }
+
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 2; position: relative; }
+
+        /* LAYOUTS */
+        .tiled-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2cqw; width: 100%; }
+        .tile { background-color: var(--panel-bg); border: 1px solid #222; padding: 2cqw; border-radius: 0.5cqw; transition: 0.3s; height: 100%; }
+        .tile:hover { border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(0, 204, 255, 0.1); transform: translateY(-0.3cqw); }
+        .tile .icon { font-size: 2.5cqw; color: var(--accent-blue); margin-bottom: 1cqw; }
+        .tile h3 { font-family: var(--font-title); font-size: 1.4cqw; margin-bottom: 0.8cqw; color: #fff; }
+        .tile p { font-size: 1.2cqw; color: var(--text-muted); line-height: 1.5; }
+
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4cqw; align-items: center; }
+        
+        /* Terminal & Code Boxes */
+        .terminal-box { background-color: var(--panel-bg); border: 1px solid #222; border-left: 0.6cqw solid var(--accent-blue); padding: 2cqw; border-radius: 0.5cqw; font-family: var(--font-code); line-height: 1.8; }
+        .terminal-header { font-size: 1.2cqw; color: var(--accent-blue); border-bottom: 1px solid rgba(0, 204, 255, 0.2); padding-bottom: 1cqw; margin-bottom: 1.5cqw; display: flex; justify-content: space-between; font-weight: bold; }
+        
+        .code-block { font-size: 1.3cqw; line-height: 1.7; background: #050505; padding: 1.5cqw 2cqw; border-radius: 0.4cqw; border: 1px solid #222; overflow: hidden; }
+
+        /* STATUS BAR & NAVIGATION */
+        .status-bar { border-top: 1px dashed #333; padding-top: 1.5cqw; margin-top: auto; display: flex; justify-content: space-between; font-size: 1.1cqw; color: var(--text-muted); text-transform: uppercase; z-index: 2; font-weight: bold; }
+        .status-blink { width: 0.8cqw; height: 0.8cqw; background: var(--accent-blue); border-radius: 50%; animation: blink-status 1.5s infinite; display: inline-block; margin-right: 0.8cqw; }
+        @keyframes blink-status { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        .nav-btn-container { position: absolute; top: 50%; width: 100%; left: 0; display: flex; justify-content: space-between; padding: 0 2cqw; z-index: 100; pointer-events: none; transform: translateY(-50%); }
+        .nav-btn { background: rgba(10,10,10,0.9); color: var(--accent-blue); border: 1px solid rgba(0, 204, 255, 0.2); padding: 1cqw 1.5cqw; pointer-events: auto; text-decoration: none; font-size: 1.5cqw; border-radius: 0.3cqw; transition: 0.3s; }
+        .nav-btn:hover { background: var(--accent-blue); color: #000; }
+
+        /* CTA BUTTON */
+        .cta-button { display: inline-block; font-family: var(--font-title); border: 2px solid var(--accent-green); color: var(--accent-green); background: rgba(0, 255, 65, 0.05); padding: 1.5cqw 4cqw; font-size: 1.8cqw; font-weight: bold; text-decoration: none; border-radius: 0.4cqw; animation: pulse 2s infinite; transition: 0.2s; }
+        .cta-button:hover { background-color: var(--accent-green); color: #000; box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); } 50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); } }
+
+        .highlight-box { background: rgba(0, 204, 255, 0.15); border: 1px solid var(--accent-blue); padding: 0.3cqw 0.8cqw; border-radius: 0.3cqw; display: inline-block; color: #fff; font-weight: bold; }
+
+        /* Glitch Effect */
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: -1; }
+        .glitch-text::before { left: 1px; text-shadow: -1px 0 var(--accent-html); animation: glitch-anim-1 3s infinite linear alternate-reverse; }
+        .glitch-text::after { left: -1px; text-shadow: -1px 0 var(--accent-green); animation: glitch-anim-2 4s infinite linear alternate-reverse; }
+        @keyframes glitch-anim-1 { 0% { clip-path: inset(20% 0 80% 0); } 20% { clip-path: inset(60% 0 10% 0); } 40% { clip-path: inset(40% 0 50% 0); } 60% { clip-path: inset(80% 0 5% 0); } 80% { clip-path: inset(10% 0 70% 0); } 100% { clip-path: inset(30% 0 20% 0); } }
+        @keyframes glitch-anim-2 { 0% { clip-path: inset(10% 0 60% 0); } 20% { clip-path: inset(30% 0 20% 0); } 40% { clip-path: inset(70% 0 10% 0); } 60% { clip-path: inset(20% 0 50% 0); } 80% { clip-path: inset(50% 0 30% 0); } 100% { clip-path: inset(5% 0 80% 0); } }
+        
+        @keyframes cyber-spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <!-- SLIDE 1: INITIALIZATION -->
+    <div class="slide" id="slide1">
+        <div class="nav-btn-container" style="justify-content: flex-end;">
+            <a href="#slide2" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ ACADEMY: WEB_HYPERMEDIA ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-01</div>
+        </div>
+        <div class="content-area" style="text-align: center;">
+            <i class="fa-solid fa-photo-film" style="font-size: 8cqw; color: var(--accent-blue); margin-bottom: 1.5cqw; text-shadow: 0 0 20px rgba(0,204,255,0.3);"></i>
+            <h1 class="glitch-text" data-text="LINKS & MEDIA">LINKS & MEDIA</h1>
+            <p style="font-size: 1.6cqw; color: var(--text-muted); margin-top: 1cqw; letter-spacing: 0.2cqw;">MODUL 2: NAVIGASI & ASET VISUAL</p>
+            
+            <div class="terminal-box" style="margin-top: 3cqw; max-width: 65%; align-self: center; text-align: left;">
+                <p style="color: var(--accent-blue); font-size: 1.3cqw; line-height: 1.8;">
+                    > Menghubungkan node informasi di seluruh dunia internet...<br>
+                    > Menyematkan aset visual grafis serta media modern...<br>
+                    > Status: Ready to execute network routes.
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SYSTEM_READY</div><div>01 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 2: KONSEP HIPERTEKS -->
+    <div class="slide" id="slide2">
+        <div class="nav-btn-container">
+            <a href="#slide1" class="nav-btn">&lt;</a><a href="#slide3" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ ARCHITECTURE: LINKING_FABRIC ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-02</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>01 //</span> Konsep Hypertext & Jaringan</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Huruf <b>H</b> pada HTML berarti <b>Hypertext</b>. Artinya, dokumen web bukan sekadar teks linier biasa, melainkan lembaran teks interaktif yang bisa meloncat ke dokumen lain melalui link.</p>
+                    <ul style="list-style: none; font-size: 1.3cqw; color: var(--text-muted); line-height: 2;">
+                        <li><i class="fa-solid fa-circle-nodes" style="color: var(--accent-blue); margin-right: 1cqw; width: 1.5cqw;"></i> Jaring Laba-laba Global (WWW)</li>
+                        <li><i class="fa-solid fa-arrow-pointer" style="color: var(--accent-blue); margin-right: 1cqw; width: 1.5cqw;"></i> Navigasi Tanpa Hambatan</li>
+                        <li><i class="fa-solid fa-server" style="color: var(--accent-blue); margin-right: 1cqw; width: 1.5cqw;"></i> Distribusi Informasi Lintas Server</li>
+                    </ul>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--text-muted);">
+                    <div class="terminal-header"><span style="color: var(--text-muted);">NETWORK_THEORY</span><span style="color: var(--text-muted);">ONLINE</span></div>
+                    <p style="font-size: 1.2cqw; color: #fff;">
+                        Sebuah website tanpa tautan (link) layaknya komputer terisolasi tanpa koneksi internet. Link adalah benang merah yang merajut ribuan halaman web menjadi sebuah sistem platform utuh.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>ROUTING_TABLE_INIT</div><div>02 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 3: TAG ANCHOR -->
+    <div class="slide" id="slide3">
+        <div class="nav-btn-container">
+            <a href="#slide2" class="nav-btn">&lt;</a><a href="#slide4" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYNTAX: ANCHOR_TAG ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-03</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>02 //</span> Menggunakan Tag Anchor &lt;a&gt;</h2>
+            <p class="desc">Untuk membuat tautan, HTML menggunakan tag <span class="highlight-box">&lt;a&gt;</span> (Anchor) yang dikombinasikan dengan atribut wajib <span class="highlight-box">href</span>.</p>
+            <div class="code-block" style="text-align: center; padding: 2.5cqw; margin-bottom: 2cqw;">
+                <span style="font-size: 2cqw;">
+                    <span style="color: var(--syn-tag);">&lt;a</span> 
+                    <span style="color: var(--syn-attr);">href</span>=<span style="color: var(--syn-string);">"https://courslan.com"</span><span style="color: var(--syn-tag);">&gt;</span> 
+                    Kunjungi Website 
+                    <span style="color: var(--syn-tag);">&lt;/a&gt;</span>
+                </span>
+            </div>
+            <div class="tiled-content">
+                <div class="tile">
+                    <h3>Tag &lt;a&gt;</h3>
+                    <p>Membungkus teks atau elemen visual lain agar bisa diklik oleh user.</p>
+                </div>
+                <div class="tile">
+                    <h3>Atribut href</h3>
+                    <p>Singkatan dari *Hypertext Reference*. Menyimpan alamat tujuan utama link tersebut.</p>
+                </div>
+                <div class="tile">
+                    <h3>Anchor Text</h3>
+                    <p>Teks di antara tag pembuka & penutup yang tampil secara visual sebagai link berwarna biru/garis bawah.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SYNTAX_OK</div><div>03 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 4: ABSOLUTE VS RELATIVE PATH -->
+    <div class="slide" id="slide4">
+        <div class="nav-btn-container">
+            <a href="#slide3" class="nav-btn">&lt;</a><a href="#slide5" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ FILE_SYSTEM: PATH_RESOLUTION ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-04</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>03 //</span> Absolute Path vs Relative Path</h2>
+            <p class="desc">Menentukan nilai <code>href</code> membutuhkan pemahaman struktur direktori komputer atau server internet.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2cqw;">
+                <div class="terminal-box" style="border-left-color: var(--accent-blue);">
+                    <div class="terminal-header"><span>ABSOLUTE PATH (ALAMAT LENGKAP)</span></div>
+                    <p style="font-size: 1.15cqw; color: var(--text-muted); margin-bottom: 1cqw;">Digunakan untuk menunjuk ke website eksternal di luar server kita. Wajib menyertakan protokol HTTP/HTTPS.</p>
+                    <div class="code-block" style="font-size: 1.1cqw;">
+                        <span style="color: var(--syn-tag);">&lt;a</span> <span style="color: var(--syn-attr);">href</span>=<span style="color: var(--syn-string);">"https://google.com"</span><span style="color: var(--syn-tag);">&gt;</span>Google<span style="color: var(--syn-tag);">&lt;/a&gt;</span>
+                    </div>
+                </div>
+                
+                <div class="terminal-box" style="border-left-color: var(--accent-green);">
+                    <div class="terminal-header"><span>RELATIVE PATH (ALAMAT LOKAL)</span></div>
+                    <p style="font-size: 1.15cqw; color: var(--text-muted); margin-bottom: 1cqw;">Menunjuk ke file internal di project folder kita sendiri. Tidak butuh nama domain.</p>
+                    <div class="code-block" style="font-size: 1.1cqw;">
+                        <span style="color: var(--syn-tag);">&lt;a</span> <span style="color: var(--syn-attr);">href</span>=<span style="color: var(--syn-string);">"about.html"</span><span style="color: var(--syn-tag);">&gt;</span>Tentang Kami<span style="color: var(--syn-tag);">&lt;/a&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>RESOLVING_PATHS</div><div>04 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 5: ATTRIBUTE TARGET -->
+    <div class="slide" id="slide5">
+        <div class="nav-btn-container">
+            <a href="#slide4" class="nav-btn">&lt;</a><a href="#slide6" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYNTAX: LINK_BEHAVIOR ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-05</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>04 //</span> Atribut target="_blank"</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Secara default, saat link diklik, halaman baru akan terbuka di tab yang sama dan menumpuk web lama Anda.</p>
+                    <p class="desc">Gunakan atribut <span class="highlight-box">target="_blank"</span> agar browser membuka tautan tersebut di <b>Tab Baru</b>, sehingga pengunjung tidak meninggalkan website utama Anda.</p>
+                </div>
+                <div class="terminal-box">
+                    <div class="terminal-header"><span>HTML IMPLEMENTATION</span></div>
+                    <div class="code-block" style="font-size: 1.2cqw; line-height: 1.6;">
+                        <span style="color: var(--syn-tag);">&lt;a</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-attr);">href</span>=<span style="color: var(--syn-string);">"https://github.com"</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-attr);">target</span>=<span style="color: var(--syn-string);">"_blank"</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                        &nbsp;&nbsp;Buka Kode Repository<br>
+                        <span style="color: var(--syn-tag);">&lt;/a&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>TAB_WINDOW_ROUTING</div><div>05 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 6: IMAGE TAG -->
+    <div class="slide" id="slide6">
+        <div class="nav-btn-container">
+            <a href="#slide5" class="nav-btn">&lt;</a><a href="#slide7" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ MEDIA: IMAGE_EMBED ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-06</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>05 //</span> Menyematkan Gambar &lt;img&gt;</h2>
+            <p class="desc">Gambar membuat website lebih hidup. Untuk menampilkannya kita menggunakan tag <span class="highlight-box">&lt;img&gt;</span>. Tag ini bersifat <b>Self-Closing</b> (Tidak butuh tag penutup <code>&lt;/img&gt;</code>).</p>
+            
+            <div class="terminal-box" style="margin-bottom: 2cqw;">
+                <div class="code-block" style="font-size: 1.5cqw; padding: 2cqw;">
+                    <span style="color: var(--syn-tag);">&lt;img</span> 
+                    <span style="color: var(--syn-attr);">src</span>=<span style="color: var(--syn-string);">"logo.png"</span> 
+                    <span style="color: var(--syn-attr);">alt</span>=<span style="color: var(--syn-string);">"Logo Akademi Courslan"</span>
+                    <span style="color: var(--syn-attr);">width</span>=<span style="color: var(--syn-string);">"300"</span><span style="color: var(--syn-tag);">&gt;</span>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2cqw; font-size: 1.2cqw;">
+                <div style="background: rgba(255,255,255,0.03); padding: 1.2cqw; border: 1px solid #222; border-radius: 0.3cqw;">
+                    <b style="color: var(--accent-blue);">Atribut src (Source):</b> Menyimpan lokasi path/URL gambar berada.
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 1.2cqw; border: 1px solid #222; border-radius: 0.3cqw;">
+                    <b style="color: var(--accent-blue);">Atribut alt (Alternative Text):</b> Teks pengganti jika gambar gagal dimuat, sekaligus dibaca oleh bot Google SEO dan Screen Reader disabilitas.
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>GRAPHICS_ENGINE_LOADED</div><div>06 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 7: AUDIO TAG -->
+    <div class="slide" id="slide7">
+        <div class="nav-btn-container">
+            <a href="#slide6" class="nav-btn">&lt;</a><a href="#slide8" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ MEDIA: AUDIO_ELEMENT ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-07</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>06 //</span> Menyematkan Audio &lt;audio&gt;</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">HTML5 mempermudah kita memutar file suara tanpa plugin flash tambahan dengan menggunakan tag <span class="highlight-box">&lt;audio&gt;</span>.</p>
+                    <p class="desc">Wajib menyertakan atribut <span class="highlight-box">controls</span> agar browser memunculkan bar tombol Play, Pause, dan Volume Mute.</p>
+                </div>
+                <div class="terminal-box">
+                    <div class="terminal-header"><span>AUDIO STRUCTURE</span></div>
+                    <div class="code-block" style="font-size: 1.2cqw; line-height: 1.7;">
+                        <span style="color: var(--syn-tag);">&lt;audio</span> <span style="color: var(--syn-attr);">controls</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;source</span> <span style="color: var(--syn-attr);">src</span>=<span style="color: var(--syn-string);">"podcast.mp3"</span> <span style="color: var(--syn-attr);">type</span>=<span style="color: var(--syn-string);">"audio/mpeg"</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                        &nbsp;&nbsp;Browser Anda tidak mendukung audio.<br>
+                        <span style="color: var(--syn-tag);">&lt;/audio&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>AUDIO_CODEC_STREAMING</div><div>07 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 8: VIDEO TAG -->
+    <div class="slide" id="slide8">
+        <div class="nav-btn-container">
+            <a href="#slide7" class="nav-btn">&lt;</a><a href="#slide9" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ MEDIA: VIDEO_ELEMENT ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-08</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>07 //</span> Menyematkan Video &lt;video&gt;</h2>
+            <p class="desc">Mirip dengan audio, tag <span class="highlight-box">&lt;video&gt;</span> digunakan untuk memutar video lokal (seperti .mp4 atau .webm) langsung di dalam halaman website.</p>
+            
+            <div class="terminal-box" style="margin-bottom: 1.5cqw;">
+                <div class="code-block" style="font-size: 1.2cqw; line-height: 1.6;">
+                    <span style="color: var(--syn-tag);">&lt;video</span> <span style="color: var(--syn-attr);">width</span>=<span style="color: var(--syn-string);">"640"</span> <span style="color: var(--syn-attr);">height</span>=<span style="color: var(--syn-string);">"360"</span> <span style="color: var(--syn-attr);">controls</span> <span style="color: var(--syn-attr);">poster</span>=<span style="color: var(--syn-string);">"thumbnail.jpg"</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;source</span> <span style="color: var(--syn-attr);">src</span>=<span style="color: var(--syn-string);">"tutorial.mp4"</span> <span style="color: var(--syn-attr);">type</span>=<span style="color: var(--syn-string);">"video/mp4"</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                    <span style="color: var(--syn-tag);">&lt;/video&gt;</span>
+                </div>
+            </div>
+            <p style="font-size: 1.15cqw; color: var(--text-muted);">Atribut <span class="highlight-box">poster</span> berfungsi untuk menampilkan gambar thumbnail sebelum video dimainkan oleh user.</p>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>VIDEO_HARDWARE_DECODING</div><div>08 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 9: SUMMARY -->
+    <div class="slide" id="slide9">
+        <div class="nav-btn-container">
+            <a href="#slide8" class="nav-btn">&lt;</a><a href="#slide10" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ MODULE_SUMMARY ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-09</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Kesimpulan Modul 2</h2>
+            <div class="tiled-content">
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-link icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Konektivitas</h3>
+                    <p style="font-size: 1.2cqw;">Tag `&lt;a&gt;` adalah inti dari web link, pisahkan penggunaan Absolute (Luar) dan Relative (Dalam project).</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-image icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Optimasi Gambar</h3>
+                    <p style="font-size: 1.2cqw;">Gunakan atribut `alt` pada `&lt;img&gt;` agar web Anda ramah terhadap mesin pencari SEO Google.</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-play icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Rich Media Native</h3>
+                    <p style="font-size: 1.2cqw;">Pemutaran `&lt;audio&gt;` dan `&lt;video&gt;` tidak perlu plugin luar, cukup manfaatkan fitur internal bawaan HTML5.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>MILESTONE_REACHED</div><div>09 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 10: MICRO LAB -->
+    <div class="slide" id="slide10">
+        <div class="nav-btn-container">
+            <a href="#slide9" class="nav-btn">&lt;</a><a href="#slide11" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ PRACTICAL_LAB: EXERCISE ]</div>
+            <div class="node-id">ARCHIVE: HTML-M2-10</div>
+        </div>
+        <div class="content-area">
+            <div class="terminal-box" style="width: 100%;">
+                <div class="terminal-header">
+                    <span>► INTERACTIVE_LAB: MEDIA_LINKING</span>
+                </div>
+                <p style="font-size: 1.35cqw; color: #fff; line-height: 1.9;">
+                    1. Buat folder baru di dalam project-mu bernama <span class="highlight-box">assets</span> lalu masukkan sebuah file gambar ke dalamnya.<br>
+                    2. Buat file HTML baru bernama <span class="highlight-box">galeri.html</span>.<br>
+                    3. Tampilkan gambar tersebut menggunakan tag <code>&lt;img&gt;</code> dengan Relative Path yang benar.<br>
+                    4. Di bawah gambar, buat sebuah Link Anchor <code>&lt;a&gt;</code> untuk kembali menuju ke file pertemuan lalu (<span class="highlight-box">belajar.html</span>).<br>
+                    5. Tambahkan satu link eksternal yang mengarah ke website <span class="highlight-box">https://courslan.com</span> dan pastikan terbuka di Tab Baru browser saat di-klik.
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>AWAITING_LAB_COMPILATION</div><div>10 / 11</div></div>
+    </div>
+
+    <!-- SLIDE 11: INTERNAL CLASS CLOSING -->
+    <div class="slide" id="slide11">
+        <div class="nav-btn-container" style="justify-content: flex-start;">
+            <a href="#slide10" class="nav-btn">&lt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYSTEM: MODULE_COMPLETED ]</div>
+            <div class="node-id">NODE_ID: CSL-END-02</div>
+        </div>
+        
+        <div class="content-area">
+            <div class="split-layout">
+                
+                <!-- SISI KIRI: Brand Orbit Ring Animation -->
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="width: 15cqw; height: 15cqw; border: 0.4cqw solid var(--accent-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 3cqw rgba(0, 204, 255, 0.25); background-color: #000;">
+                        <!-- Menggunakan file logo yang ada pada sistem root user -->
+                        <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" style="width: 75%; height: 75%; object-fit: contain; position: relative; z-index: 5;">
+                        <svg style="position: absolute; width: 19cqw; height: 19cqw; top: -2.4cqw; left: -2.4cqw; animation: cyber-spin 12s linear infinite; pointer-events: none; z-index: 2;" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="var(--accent-purple)" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.6"/>
+                            <circle cx="50" cy="2" r="3" fill="var(--accent-blue)" />
+                            <circle cx="84" cy="84" r="1.5" fill="var(--accent-purple)" />
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-title); font-size: 2.2cqw; margin-top: 2cqw; letter-spacing: 0.2cqw; color: #fff;">MODULE 02 COMPLETE</h3>
+                    <p style="font-size: 1.2cqw; color: var(--accent-blue); text-transform: uppercase; margin-top: 0.5cqw;">Next Level Locked</p>
+                </div>
+                
+                <!-- SISI KANAN: Konten Kemajuan Belajar -->
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 2cqw;">
+                    <div class="cta-container" style="text-align: left; margin-top: 0; margin-bottom: 1cqw;">
+                        <a href="#" class="cta-button">LANJUT KE MODUL 3</a>
+                    </div>
+                    
+                    <div class="terminal-box" style="margin-top: 0; width: 100%; border-left-color: var(--accent-green); padding: 2.5cqw;">
+                        <div class="terminal-header" style="color: var(--accent-green); border-bottom-color: rgba(0,255,65,0.1); padding-bottom: 0.8cqw; margin-bottom: 1cqw;">
+                            <span>📡 CODE_ROUTE_LOG</span>
+                            <span>STATUS: SUCCESS</span>
+                        </div>
+                        <p style="color: #E0E0E0; font-size: 1.2cqw; line-height: 1.7; font-family: var(--font-code);">
+                            Luar biasa! Seluruh materi navigasi tautan antar halaman dan teknik embedding multimedia di Modul 2 telah sukses dikompilasi ke dalam ingatan Anda.<br><br>
+                            <span style="color: var(--accent-green); font-weight: bold;">[+] ASSIGNMENT:</span> Selesaikan tantangan pemetaan file relatif di Micro-Lab sebelum memulai sesi arsitektur berikutnya.<br>
+                            <span style="color: var(--accent-blue); font-weight: bold;">[+] STANDBY:</span> Sesi berikutnya akan membawa kita naik tingkat untuk membedah pembuatan formulir input data interaktif user.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <div style="display: flex; align-items: center; gap: 1cqw;">
+                <div class="status-blink" style="background-color: var(--accent-green);"></div>
+                <span style="color: var(--accent-green);">PROGRESS_SAVED // NET_ROUTING_SECURE</span>
+            </div>
+            <div>11 / 11</div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    @keyframes cyber-spin { 100% { transform: rotate(360deg); } }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courslan Academy: HTML Fundamentals (Modul 1)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CORE SYSTEM SETUP - UX & 16:9 OPTIMIZED */
+        :root {
+            --bg-color: #080808; 
+            --panel-bg: #121212;
+            --accent-green: #00FF41;
+            --accent-html: #FF5722; 
+            --accent-dim: #331400;
+            --accent-blue: #00CCFF;   
+            --accent-purple: #9900FF; 
+            --text-main: #F5F5F5; 
+            --text-muted: #B3B3B3; 
+            --font-title: 'Orbitron', sans-serif;
+            --font-code: 'Courier Prime', monospace;
+            
+            /* Syntax Highlighting */
+            --syn-tag: #569CD6;
+            --syn-attr: #9CDCFE;
+            --syn-string: #CE9178;
+            --syn-text: #E0E0E0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #111;
+            color: var(--text-main);
+            font-family: var(--font-code);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 16:9 ASPECT RATIO CONTAINER */
+        .slide-container {
+            width: 100vw;
+            max-width: calc(100vh * 16 / 9);
+            height: calc(100vw * 9 / 16);
+            max-height: 100vh;
+            container-type: inline-size;
+            overflow-x: auto;
+            display: flex;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .slide-container::-webkit-scrollbar { display: none; }
+
+        .slide {
+            min-width: 100cqw;
+            max-width: 100cqw;
+            height: 100%;
+            scroll-snap-align: start;
+            background-color: var(--bg-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 4cqw 6cqw;
+            overflow: hidden;
+        }
+
+        /* Scanline Overlay */
+        .slide::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 87, 34, 0.02), rgba(0, 255, 65, 0.02));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* TYPOGRAPHY */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--accent-html);
+            padding-bottom: 1.5cqw;
+            margin-bottom: 2.5cqw;
+            z-index: 2;
+        }
+
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8cqw;
+            font-size: 1.2cqw;
+        }
+
+        .logo-icon {
+            width: 2.5cqw;
+            height: 2.5cqw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: var(--font-title);
+            font-weight: 900;
+            color: var(--accent-green);
+            letter-spacing: 0.1cqw;
+            text-transform: uppercase;
+        }
+
+        .system-tag { color: var(--accent-html); font-size: 1.3cqw; text-transform: uppercase; letter-spacing: 0.1cqw; font-weight: bold; }
+        .node-id { color: var(--text-muted); font-size: 1.2cqw; }
+
+        h1 { font-family: var(--font-title); font-size: 5cqw; font-weight: 900; color: var(--accent-html); text-shadow: 0 0 15px rgba(255, 87, 34, 0.3); line-height: 1.2; }
+        h2.slide-title { font-family: var(--font-title); font-size: 3cqw; margin-bottom: 1.5cqw; color: #fff; line-height: 1.3; border-left: 0.5cqw solid var(--accent-html); padding-left: 1.5cqw; }
+        h2.slide-title span { color: var(--accent-html); }
+        
+        .subtitle { font-size: 1.6cqw; color: var(--text-muted); letter-spacing: 0.2cqw; text-transform: uppercase; margin-bottom: 2cqw; }
+        p.desc { font-size: 1.5cqw; color: #E0E0E0; line-height: 1.7; margin-bottom: 2cqw; }
+
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 2; position: relative; }
+
+        /* LAYOUTS */
+        .tiled-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2cqw; width: 100%; }
+        .tile { background-color: var(--panel-bg); border: 1px solid #222; padding: 2cqw; border-radius: 0.5cqw; transition: 0.3s; height: 100%; }
+        .tile:hover { border-color: var(--accent-html); box-shadow: 0 0 15px rgba(255, 87, 34, 0.1); transform: translateY(-0.3cqw); }
+        .tile .icon { font-size: 2.5cqw; color: var(--accent-html); margin-bottom: 1cqw; }
+        .tile h3 { font-family: var(--font-title); font-size: 1.4cqw; margin-bottom: 0.8cqw; color: #fff; }
+        .tile p { font-size: 1.2cqw; color: var(--text-muted); line-height: 1.5; }
+
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4cqw; align-items: center; }
+        
+        /* Terminal & Code Boxes */
+        .terminal-box { background-color: var(--panel-bg); border: 1px solid #222; border-left: 0.6cqw solid var(--accent-html); padding: 2cqw; border-radius: 0.5cqw; font-family: var(--font-code); line-height: 1.8; }
+        .terminal-header { font-size: 1.2cqw; color: var(--accent-html); border-bottom: 1px solid rgba(255, 87, 34, 0.2); padding-bottom: 1cqw; margin-bottom: 1.5cqw; display: flex; justify-content: space-between; font-weight: bold; }
+        
+        .code-block { font-size: 1.3cqw; line-height: 1.7; background: #050505; padding: 1.5cqw 2cqw; border-radius: 0.4cqw; border: 1px solid #222; overflow: hidden; }
+
+        /* STATUS BAR & NAVIGATION */
+        .status-bar { border-top: 1px dashed #333; padding-top: 1.5cqw; margin-top: auto; display: flex; justify-content: space-between; font-size: 1.1cqw; color: var(--text-muted); text-transform: uppercase; z-index: 2; font-weight: bold; }
+        .status-blink { width: 0.8cqw; height: 0.8cqw; background: var(--accent-html); border-radius: 50%; animation: blink-status 1.5s infinite; display: inline-block; margin-right: 0.8cqw; }
+        @keyframes blink-status { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        .nav-btn-container { position: absolute; top: 50%; width: 100%; left: 0; display: flex; justify-content: space-between; padding: 0 2cqw; z-index: 100; pointer-events: none; transform: translateY(-50%); }
+        .nav-btn { background: rgba(10,10,10,0.9); color: var(--accent-html); border: 1px solid var(--accent-dim); padding: 1cqw 1.5cqw; pointer-events: auto; text-decoration: none; font-size: 1.5cqw; border-radius: 0.3cqw; transition: 0.3s; }
+        .nav-btn:hover { background: var(--accent-html); color: #000; }
+
+        /* CTA BUTTON */
+        .cta-button { display: inline-block; font-family: var(--font-title); border: 2px solid var(--accent-green); color: var(--accent-green); background: rgba(0, 255, 65, 0.05); padding: 1.5cqw 4cqw; font-size: 1.8cqw; font-weight: bold; text-decoration: none; border-radius: 0.4cqw; animation: pulse 2s infinite; transition: 0.2s; }
+        .cta-button:hover { background-color: var(--accent-green); color: #000; box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); } 50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); } }
+
+        .highlight-box { background: rgba(255, 87, 34, 0.15); border: 1px solid var(--accent-html); padding: 0.3cqw 0.8cqw; border-radius: 0.3cqw; display: inline-block; color: #fff; font-weight: bold; }
+
+        /* Glitch Effect */
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: -1; }
+        .glitch-text::before { left: 1px; text-shadow: -1px 0 var(--accent-html); animation: glitch-anim-1 3s infinite linear alternate-reverse; }
+        .glitch-text::after { left: -1px; text-shadow: -1px 0 var(--accent-green); animation: glitch-anim-2 4s infinite linear alternate-reverse; }
+        @keyframes glitch-anim-1 { 0% { clip-path: inset(20% 0 80% 0); } 20% { clip-path: inset(60% 0 10% 0); } 40% { clip-path: inset(40% 0 50% 0); } 60% { clip-path: inset(80% 0 5% 0); } 80% { clip-path: inset(10% 0 70% 0); } 100% { clip-path: inset(30% 0 20% 0); } }
+        @keyframes glitch-anim-2 { 0% { clip-path: inset(10% 0 60% 0); } 20% { clip-path: inset(30% 0 20% 0); } 40% { clip-path: inset(70% 0 10% 0); } 60% { clip-path: inset(20% 0 50% 0); } 80% { clip-path: inset(50% 0 30% 0); } 100% { clip-path: inset(5% 0 80% 0); } }
+        
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <div class="slide" id="slide1">
+        <div class="nav-btn-container" style="justify-content: flex-end;">
+            <a href="#slide2" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ ACADEMY: CORE_FOUNDATION ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-01</div>
+        </div>
+        <div class="content-area" style="text-align: center;">
+            <i class="fa-brands fa-html5" style="font-size: 8cqw; color: var(--accent-html); margin-bottom: 1.5cqw; text-shadow: 0 0 20px rgba(255,87,34,0.3);"></i>
+            <h1 class="glitch-text" data-text="HTML FUNDAMENTALS">HTML FUNDAMENTALS</h1>
+            <p style="font-size: 1.6cqw; color: var(--text-muted); margin-top: 1cqw; letter-spacing: 0.2cqw;">MODUL 1: DASAR & ANATOMI WEB</p>
+            
+            <div class="terminal-box" style="margin-top: 3cqw; max-width: 65%; align-self: center; text-align: left;">
+                <p style="color: var(--accent-html); font-size: 1.3cqw; line-height: 1.8;">
+                    > Inisialisasi protokol pembelajaran web...<br>
+                    > Membedah cara kerja browser membaca kode...<br>
+                    > Status: Ready for compilation.
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SYSTEM_READY</div><div>01 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide2">
+        <div class="nav-btn-container">
+            <a href="#slide1" class="nav-btn">&lt;</a><a href="#slide3" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ ARCHITECTURE: INTERPRETATION ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-02</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>01 //</span> Cara Browser Bekerja</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Browser (Chrome, Safari, Firefox) bertindak sebagai <b>Interpreter</b>. Ia membaca file HTML dari baris paling atas hingga bawah, lalu merubah teks kode tersebut menjadi visual.</p>
+                    <ul style="list-style: none; font-size: 1.3cqw; color: var(--text-muted); line-height: 2;">
+                        <li><i class="fa-solid fa-cloud-arrow-down" style="color: var(--accent-html); margin-right: 1cqw; width: 1.5cqw;"></i> 1. Mengunduh file dari Server</li>
+                        <li><i class="fa-solid fa-code" style="color: var(--accent-html); margin-right: 1cqw; width: 1.5cqw;"></i> 2. Parsing Tag & Atribut</li>
+                        <li><i class="fa-solid fa-eye" style="color: var(--accent-html); margin-right: 1cqw; width: 1.5cqw;"></i> 3. Rendering Visual (Painting)</li>
+                    </ul>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--text-muted);">
+                    <div class="terminal-header"><span style="color: var(--text-muted);">LOG: RENDER_ENGINE</span><span style="color: var(--text-muted);">STABLE</span></div>
+                    <p style="font-size: 1.2cqw; color: #fff;">
+                        Jika kode HTML Anda salah tulis (typo), browser tidak akan "error" (Crash) seperti bahasa pemrograman lain. Ia akan mencoba "menebak" maksud Anda. Namun, ini bisa membuat desain web berantakan. <b>Menulis sintaksis absolut adalah kewajiban.</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>HANDSHAKE_ESTABLISHED</div><div>02 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide3">
+        <div class="nav-btn-container">
+            <a href="#slide2" class="nav-btn">&lt;</a><a href="#slide4" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYNTAX: ANATOMY ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-03</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>02 //</span> Anatomi Sebuah Tag</h2>
+            <div class="code-block" style="text-align: center; padding: 3cqw; margin-bottom: 2cqw; border: 1px solid var(--accent-html);">
+                <span style="font-size: 2.2cqw;">
+                    <span style="color: var(--syn-tag);">&lt;p</span> 
+                    <span style="color: var(--syn-attr);">class</span>=<span style="color: var(--syn-string);">"info"</span><span style="color: var(--syn-tag);">&gt;</span> 
+                    Halo Courslan 
+                    <span style="color: var(--syn-tag);">&lt;/p&gt;</span>
+                </span>
+            </div>
+            <div class="tiled-content">
+                <div class="tile">
+                    <h3>1. Tag Pembuka</h3>
+                    <p>Menandai dimulainya sebuah elemen. Ditulis dengan kurung siku <span class="highlight-box">&lt; &gt;</span>.</p>
+                </div>
+                <div class="tile">
+                    <h3>2. Konten</h3>
+                    <p>Informasi aktual (seperti teks atau gambar) yang dibungkus dan akan tampil di layar pengguna.</p>
+                </div>
+                <div class="tile">
+                    <h3>3. Tag Penutup</h3>
+                    <p>Wajib memiliki garis miring <span class="highlight-box">/</span> sebelum nama tag untuk menutup area elemen tersebut.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>PARSING_SYNTAX</div><div>03 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide4">
+        <div class="nav-btn-container">
+            <a href="#slide3" class="nav-btn">&lt;</a><a href="#slide5" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYNTAX: ATTRIBUTES ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-04</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>03 //</span> Atribut: Metadata Tambahan</h2>
+            <p class="desc">Atribut memberikan instruksi ekstra pada elemen. Selalu diletakkan di dalam <b>Tag Pembuka</b> dan formatnya berpasangan <code>nama="nilai"</code>.</p>
+            <div class="terminal-box" style="margin-bottom: 2cqw;">
+                <p style="font-size: 1.4cqw;">
+                    <span style="color: var(--syn-tag);">&lt;a</span> 
+                    <span style="color: var(--syn-attr);">href</span>=<span style="color: var(--syn-string);">"https://courslan.com"</span> 
+                    <span style="color: var(--syn-attr);">target</span>=<span style="color: var(--syn-string);">"_blank"</span><span style="color: var(--syn-tag);">&gt;</span>
+                    Menuju Academy
+                    <span style="color: var(--syn-tag);">&lt;/a&gt;</span>
+                </p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2cqw;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5cqw; border-radius: 0.3cqw; border: 1px solid #222;">
+                    <span style="color: var(--accent-html); font-weight: bold; font-size: 1.3cqw;">Nama Atribut:</span> <br>
+                    <span style="font-size: 1.2cqw; color: var(--text-muted);">Menentukan *apa* yang diatur (misal: <code>href</code> untuk link, <code>src</code> untuk gambar).</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5cqw; border-radius: 0.3cqw; border: 1px solid #222;">
+                    <span style="color: var(--accent-html); font-weight: bold; font-size: 1.3cqw;">Nilai Atribut (Value):</span> <br>
+                    <span style="font-size: 1.2cqw; color: var(--text-muted);">Spesifikasi pengaturannya. Selalu dibungkus tanda kutip ganda <code>"..."</code>.</span>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>METADATA_LOADED</div><div>04 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <div class="nav-btn-container">
+            <a href="#slide4" class="nav-btn">&lt;</a><a href="#slide6" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ STRUCTURE: BOILERPLATE ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-05</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>04 //</span> Struktur Wajib (Boilerplate)</h2>
+            <div class="split-layout">
+                <div class="code-block" style="font-size: 1.1cqw;">
+                    <span style="color: #6A9955;">&lt;!-- Deklarasi Versi --&gt;</span><br>
+                    <span style="color: var(--syn-tag); font-weight: bold;">&lt;!DOCTYPE html&gt;</span><br>
+                    <span style="color: var(--syn-tag);">&lt;html</span> <span style="color: var(--syn-attr);">lang</span>=<span style="color: var(--syn-string);">"id"</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;head&gt;</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;title&gt;</span>Web Saya<span style="color: var(--syn-tag);">&lt;/title&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/head&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;body&gt;</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #fff;">Konten Anda di sini...</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/body&gt;</span><br>
+                    <span style="color: var(--syn-tag);">&lt;/html&gt;</span>
+                </div>
+                <ul style="list-style: none; font-size: 1.2cqw; line-height: 1.8; color: #E0E0E0;">
+                    <li><span class="highlight-box">!DOCTYPE</span>: Perintah untuk browser agar merender ini sebagai HTML5 terbaru.</li>
+                    <li style="margin-top: 1cqw;"><span class="highlight-box">&lt;html&gt;</span>: Tag wadah akar (root) untuk seluruh elemen.</li>
+                    <li style="margin-top: 1cqw;"><span class="highlight-box">&lt;head&gt;</span>: Otak dokumen. Berisi metadata, pemanggilan file CSS, dan judul Tab. <b>Area ini tidak terlihat oleh user.</b></li>
+                    <li style="margin-top: 1cqw;"><span class="highlight-box">&lt;body&gt;</span>: Tubuh web. Semua teks, video, & tombol yang <b>terlihat di layar</b> harus masuk ke dalam sini.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>ARCHITECTURE_VALIDATED</div><div>05 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide6">
+        <div class="nav-btn-container">
+            <a href="#slide5" class="nav-btn">&lt;</a><a href="#slide7" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ TYPOGRAPHY: HIERARCHY ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-06</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>05 //</span> Tipografi: Heading (H1-H6)</h2>
+            <p class="desc">Heading mendefinisikan *hierarki informasi*, mirip seperti bab dalam sebuah buku. Ingat, heading digunakan untuk struktur, bukan untuk sekadar memperbesar ukuran font!</p>
+            
+            <div class="terminal-box" style="margin-bottom: 2cqw;">
+                <span style="color: var(--syn-tag);">&lt;h1&gt;</span><span style="font-size: 2cqw; font-weight: bold; color: #fff;"> Judul Utama Halaman </span><span style="color: var(--syn-tag);">&lt;/h1&gt;</span><br>
+                <span style="color: var(--syn-tag);">&lt;h2&gt;</span><span style="font-size: 1.6cqw; color: #ddd;"> Sub-Judul Utama </span><span style="color: var(--syn-tag);">&lt;/h2&gt;</span><br>
+                <span style="color: var(--syn-tag);">&lt;h3&gt;</span><span style="font-size: 1.3cqw; color: #bbb;"> Sub-bagian dari H2 </span><span style="color: var(--syn-tag);">&lt;/h3&gt;</span>
+            </div>
+            
+            <div style="background: rgba(255,87,34,0.1); padding: 1.5cqw; border-radius: 0.3cqw; border: 1px solid var(--accent-html); font-size: 1.2cqw; line-height: 1.6;">
+                <i class="fa-solid fa-triangle-exclamation" style="margin-right: 1cqw; color: var(--accent-html);"></i> 
+                <b>SEO RULE:</b> Gunakan hanya <b>SATU H1</b> per halaman. Ini membantu mesin pencari Google (SEO) untuk langsung memahami apa topik utama dari halaman website Anda.
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>HIERARCHY_PARSED</div><div>06 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide7">
+        <div class="nav-btn-container">
+            <a href="#slide6" class="nav-btn">&lt;</a><a href="#slide8" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ TYPOGRAPHY: TEXT_FLOW ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-07</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>06 //</span> Tipografi: Paragraf & Teks</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Tag <span class="highlight-box">&lt;p&gt;</span> digunakan untuk membungkus satu blok paragraf teks yang berdiri sendiri.</p>
+                    <div class="terminal-box" style="font-size: 1.2cqw;">
+                        <span style="color: var(--syn-tag);">&lt;p&gt;</span><br>
+                        &nbsp;&nbsp;Belajar koding itu menyenangkan.<br>
+                        <span style="color: var(--syn-tag);">&lt;/p&gt;</span>
+                    </div>
+                </div>
+                <div class="tile" style="height: auto;">
+                    <h3 style="color: var(--accent-html);">Elemen Teks Khusus (Inline)</h3>
+                    <p style="margin-bottom: 1cqw; font-size: 1.2cqw;"><span class="highlight-box">&lt;strong&gt;</span> : Teks Tebal (Menandakan kata tersebut sangat penting).</p>
+                    <p style="margin-bottom: 1cqw; font-size: 1.2cqw;"><span class="highlight-box">&lt;em&gt;</span> : Teks Miring (Menandakan penekanan intonasi bacaan).</p>
+                    <p style="font-size: 1.2cqw;"><span class="highlight-box">&lt;br&gt;</span> : Baris Baru (Single Line Break - Tanpa tag penutup).</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>CONTENT_RENDERED</div><div>07 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide8">
+        <div class="nav-btn-container">
+            <a href="#slide7" class="nav-btn">&lt;</a><a href="#slide9" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ BEST_PRACTICES: INDENTATION ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-08</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>07 //</span> Whitespace & Indentasi</h2>
+            <p class="desc">Browser akan mengabaikan spasi berlebih atau baris baru kosong di dalam kodemu. Lalu mengapa kita perlu merapikannya? <b>Demi manusia (Rekan Tim Developer).</b></p>
+            
+            <div class="split-layout">
+                <div class="terminal-box" style="border-left-color: #ff3333;">
+                    <div class="terminal-header"><span style="color: #ff3333;">BAD CODE (SUSAH DIBACA)</span></div>
+                    <p style="font-size: 1.1cqw; color: #ff9999;">&lt;body&gt;&lt;h1&gt;Judul&lt;/h1&gt;&lt;p&gt;Teks&lt;/p&gt;&lt;div&gt;&lt;p&gt;Subteks&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;</p>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--accent-green);">
+                    <div class="terminal-header"><span style="color: var(--accent-green);">GOOD CODE (CLEAN)</span></div>
+                    <p style="font-size: 1.1cqw; color: var(--text-main);">
+                        <span style="color: var(--syn-tag);">&lt;body&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;h1&gt;</span>Judul<span style="color: var(--syn-tag);">&lt;/h1&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;p&gt;</span>Teks<span style="color: var(--syn-tag);">&lt;/p&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;div&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;p&gt;</span>Subteks<span style="color: var(--syn-tag);">&lt;/p&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/div&gt;</span><br>
+                        <span style="color: var(--syn-tag);">&lt;/body&gt;</span>
+                    </p>
+                </div>
+            </div>
+            <p style="font-size: 1.1cqw; margin-top: 2cqw; color: var(--text-muted);">Gunakan 2 atau 4 spasi (tombol Tab) untuk elemen yang berada di dalam elemen lain (*Nesting*).</p>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>CLEAN_CODE_PROTOCOL</div><div>08 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide9">
+        <div class="nav-btn-container">
+            <a href="#slide8" class="nav-btn">&lt;</a><a href="#slide10" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ MODULE_SUMMARY ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-09</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Kesimpulan Modul 1</h2>
+            <div class="tiled-content">
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-code icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Kerangka Statis</h3>
+                    <p style="font-size: 1.2cqw;">HTML bukan untuk pemrograman logika, melainkan pondasi untuk mendeskripsikan struktur web.</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-sitemap icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Hierarki Tag</h3>
+                    <p style="font-size: 1.2cqw;">Setiap tag punya tugasnya (Pembuka & Penutup). `head` untuk data tak terlihat, and `body` untuk konten visual.</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-magnifying-glass icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Optimasi (SEO)</h3>
+                    <p style="font-size: 1.2cqw;">Heading (terutama H1) memberikan sinyal kuat kepada Google tentang apa isi halaman web yang Anda buat.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>MILESTONE_REACHED</div><div>09 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide10">
+        <div class="nav-btn-container">
+            <a href="#slide9" class="nav-btn">&lt;</a><a href="#slide11" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ PRACTICAL_LAB: EXERCISE ]</div>
+            <div class="node-id">ARCHIVE: HTML-M1-10</div>
+        </div>
+        <div class="content-area">
+            <div class="terminal-box" style="width: 100%;">
+                <div class="terminal-header">
+                    <span>► ACTION_REQUIRED: WRITE_CODE</span>
+                </div>
+                <p style="font-size: 1.4cqw; color: #fff; line-height: 2;">
+                    1. Buat file baru di laptopmu bernama <span class="highlight-box">belajar.html</span>.<br>
+                    2. Masukkan struktur wajib HTML5 (Boilerplate).<br>
+                    3. Beri teks <span class="highlight-box">Profil Saya</span> di dalam tag <code>&lt;title&gt;</code>.<br>
+                    4. Di dalam tag <code>&lt;body&gt;</code>, buat sebuah judul H1 yang berisi Nama Anda.<br>
+                    5. Di bawah judul, buat satu buah Paragraf <code>&lt;p&gt;</code> yang menceritakan tentang hobi Anda secara singkat.<br>
+                    6. Simpan file tersebut, lalu klik ganda untuk membukanya di Browser.
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>AWAITING_INPUT</div><div>10 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide11">
+        <div class="nav-btn-container" style="justify-content: flex-start;">
+            <a href="#slide10" class="nav-btn">&lt;</a>
+        </div>
+        <div class="slide-header">
+                        <div class="logo-brand">
+                <div class="logo-icon"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo"></div>
+                <span class="logo-text">Courslan</span>
+            </div>
+            <div class="system-tag">[ SYSTEM: MODULE_COMPLETED ]</div>
+            <div class="node-id">NODE_ID: CSL-END-01</div>
+        </div>
+        
+        <div class="content-area">
+            <div class="split-layout">
+                
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="width: 15cqw; height: 15cqw; border: 0.4cqw solid var(--accent-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 3cqw rgba(0, 204, 255, 0.25); background-color: #000;">
+                        <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" style="width: 75%; height: 75%; object-fit: contain; position: relative; z-index: 5;">
+                        <svg style="position: absolute; width: 19cqw; height: 19cqw; top: -2.4cqw; left: -2.4cqw; animation: cyber-spin 12s linear infinite; pointer-events: none; z-index: 2;" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="var(--accent-purple)" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.6"/>
+                            <circle cx="50" cy="2" r="3" fill="var(--accent-blue)" />
+                            <circle cx="84" cy="84" r="1.5" fill="var(--accent-purple)" />
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-title); font-size: 2.2cqw; margin-top: 2cqw; letter-spacing: 0.2cqw; color: #fff;">MODULE 01 COMPLETE</h3>
+                    <p style="font-size: 1.2cqw; color: var(--accent-blue); text-transform: uppercase; margin-top: 0.5cqw;">Next Level Locked</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; justify-content: center; gap: 2cqw;">
+                    <div class="cta-container" style="text-align: left; margin-top: 0; margin-bottom: 1cqw;">
+                        <a href="#" class="cta-button">LANJUT KE MODUL 2</a>
+                    </div>
+                    
+                    <div class="terminal-box" style="margin-top: 0; width: 100%; border-left-color: var(--accent-green); padding: 2.5cqw;">
+                        <div class="terminal-header" style="color: var(--accent-green); border-bottom-color: rgba(0,255,65,0.1); padding-bottom: 0.8cqw; margin-bottom: 1cqw;">
+                            <span>📡 LEARNING_PROGRESS_LOG</span>
+                            <span>STATUS: SUCCESS</span>
+                        </div>
+                        <p style="color: #E0E0E0; font-size: 1.2cqw; line-height: 1.7; font-family: var(--font-code);">
+                            Selamat! Anda telah menyelesaikan seluruh materi dasar pada Modul 1.<br><br>
+                            <span style="color: var(--accent-green); font-weight: bold;">[+] ASSIGNMENT:</span> Pastikan skrip pada latihan praktis (Micro-Lab 01) sudah berjalan dengan lancar tanpa error di server lokal Anda.<br>
+                            <span style="color: var(--accent-blue); font-weight: bold;">[+] REPETITION PROTOCOL:</span> Jangan ragu untuk mengulang kembali materi tata penulisan jika diperlukan sebelum kita melangkah bersama ke level arsitektur web selanjutnya.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <div style="display: flex; align-items: center; gap: 1cqw;">
+                <div class="status-blink" style="background-color: var(--accent-green);"></div>
+                <span style="color: var(--accent-green);">PROGRESS_SAVED // STANDBY_FOR_NEXT_NODE</span>
+            </div>
+            <div>11 / 11</div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    @keyframes cyber-spin { 100% { transform: rotate(360deg); } }
+</style>
+
+</body>
+</html>
