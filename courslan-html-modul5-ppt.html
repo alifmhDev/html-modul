@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courslan Academy: Semantic HTML & SEO (Modul 5)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CORE PPT 16:9 ENGINE - ANTI-OVERFLOW FIXED */
+        :root {
+            --bg-color: #080808; 
+            --panel-bg: #121212;
+            --accent-green: #00FF41;
+            --accent-blue: #00CCFF;   
+            --accent-purple: #9900FF; 
+            --accent-html: #FFD700;   /* Emas Standard SEO */
+            --accent-dim: #332b00;    
+            --text-main: #F5F5F5; 
+            --text-muted: #B3B3B3; 
+            --font-title: 'Orbitron', sans-serif;
+            --font-code: 'Courier Prime', monospace;
+            --syn-tag: #569CD6; --syn-attr: #9CDCFE; --syn-string: #CE9178; --syn-comment: #6A9955;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #111; color: var(--text-main); font-family: var(--font-code);
+            display: flex; align-items: center; justify-content: center;
+            width: 100vw; height: 100vh; overflow: hidden;
+        }
+
+        /* 16:9 CONTAINER */
+        .slide-container {
+            width: 100vw; max-width: calc(100vh * 16 / 9);
+            height: calc(100vw * 9 / 16); max-height: 100vh;
+            container-type: inline-size; overflow-x: auto; display: flex;
+            scroll-snap-type: x mandatory; scroll-behavior: smooth;
+            background-color: var(--bg-color); position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .slide-container::-webkit-scrollbar { display: none; }
+
+        .slide {
+            min-width: 100cqw; max-width: 100cqw; height: 100%;
+            scroll-snap-align: start; background-color: var(--bg-color);
+            position: relative; display: flex; flex-direction: column;
+            padding: 3cqw 5cqw; overflow: hidden;
+        }
+
+        .slide::before {
+            content: " "; display: block; position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 215, 0, 0.02), rgba(0, 204, 255, 0.02));
+            z-index: 10; background-size: 100% 4px, 6px 100%; pointer-events: none;
+        }
+
+        /* TYPOGRAPHY */
+        .slide-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px dashed var(--accent-html); padding-bottom: 1cqw; margin-bottom: 1.5cqw; z-index: 2; flex-shrink: 0;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 1cqw; }
+        .header-logo { width: 3cqw; height: 3cqw; object-fit: contain; filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)); }
+
+        .system-tag { color: var(--accent-html); font-size: 1.1cqw; text-transform: uppercase; font-weight: bold; }
+        .node-id { color: var(--text-muted); font-size: 1cqw; }
+
+        h1 { font-family: var(--font-title); font-size: 4.5cqw; font-weight: 900; color: var(--accent-html); text-shadow: 0 0 15px rgba(255, 215, 0, 0.3); line-height: 1.2; }
+        h2.slide-title { font-family: var(--font-title); font-size: 2.5cqw; margin-bottom: 1cqw; color: #fff; border-left: 0.5cqw solid var(--accent-html); padding-left: 1.2cqw; flex-shrink: 0; }
+        h2.slide-title span { color: var(--accent-html); }
+        
+        .subtitle { font-size: 1.4cqw; color: var(--text-muted); letter-spacing: 0.1cqw; text-transform: uppercase; margin-bottom: 1cqw; }
+        p.desc { font-size: 1.25cqw; color: #E0E0E0; line-height: 1.6; margin-bottom: 1cqw; }
+
+        /* KUNCI ANTI BABLAS: Area Konten Scroll Internal */
+        .content-area { 
+            flex-grow: 1; display: flex; flex-direction: column; justify-content: center; 
+            z-index: 2; position: relative; overflow-y: auto; overflow-x: hidden; padding-right: 1cqw;
+        }
+        .content-area::-webkit-scrollbar { width: 0.4cqw; }
+        .content-area::-webkit-scrollbar-thumb { background: #333; border-radius: 1cqw; }
+
+        /* LAYOUTS */
+        .tiled-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5cqw; width: 100%; }
+        .tile { background-color: var(--panel-bg); border: 1px solid #222; padding: 1.5cqw; border-radius: 0.5cqw; transition: 0.3s; }
+        .tile .icon { font-size: 2.2cqw; color: var(--accent-html); margin-bottom: 1cqw; }
+        .tile h3 { font-family: var(--font-title); font-size: 1.2cqw; margin-bottom: 0.5cqw; color: #fff; }
+        .tile p { font-size: 1.1cqw; color: var(--text-muted); line-height: 1.4; }
+
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3cqw; align-items: center; }
+        
+        .terminal-box { background-color: var(--panel-bg); border: 1px solid #222; border-left: 0.5cqw solid var(--accent-html); padding: 1.5cqw; border-radius: 0.5cqw; line-height: 1.6; margin-bottom: 1cqw; }
+        .terminal-header { font-size: 1cqw; color: var(--accent-html); border-bottom: 1px solid rgba(255, 215, 0, 0.2); padding-bottom: 0.5cqw; margin-bottom: 0.8cqw; display: flex; justify-content: space-between; font-weight: bold; }
+        
+        .code-block { font-size: 1.1cqw; line-height: 1.5; background: #050505; padding: 1cqw 1.5cqw; border-radius: 0.4cqw; border: 1px solid #222; margin-bottom: 1cqw; }
+
+        /* STATUS BAR */
+        .status-bar { border-top: 1px dashed #333; padding-top: 1cqw; margin-top: 1cqw; display: flex; justify-content: space-between; font-size: 1cqw; color: var(--text-muted); text-transform: uppercase; z-index: 2; font-weight: bold; flex-shrink: 0; }
+        .status-blink { width: 0.8cqw; height: 0.8cqw; background: var(--accent-html); border-radius: 50%; animation: blink-status 1.5s infinite; display: inline-block; margin-right: 0.8cqw; }
+        @keyframes blink-status { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        .nav-btn-container { position: absolute; top: 50%; width: 100%; left: 0; display: flex; justify-content: space-between; padding: 0 1.5cqw; z-index: 100; pointer-events: none; transform: translateY(-50%); }
+        .nav-btn { background: rgba(10,10,10,0.9); color: var(--accent-html); border: 1px solid var(--accent-dim); padding: 1cqw 1.5cqw; pointer-events: auto; text-decoration: none; font-size: 1.5cqw; border-radius: 0.3cqw; }
+
+        .cta-button { display: inline-block; font-family: var(--font-title); border: 2px solid var(--accent-green); color: var(--accent-green); background: rgba(0, 255, 65, 0.05); padding: 1.2cqw 3cqw; font-size: 1.4cqw; font-weight: bold; text-decoration: none; border-radius: 0.4cqw; }
+        
+        .highlight-box { color: var(--bg-color); background: var(--accent-html); padding: 0.1cqw 0.4cqw; border-radius: 0.2cqw; font-weight: bold; }
+        
+        @keyframes cyber-spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <div class="slide" id="slide1">
+        <div class="nav-btn-container" style="justify-content: flex-end;"><a href="#slide2" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ MODUL 5: MODERN_ARCHITECTURE ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-01</div>
+        </div>
+        <div class="content-area" style="text-align: center; align-items: center;">
+            <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Logo" style="width: 10cqw; height: 10cqw; object-fit: contain; margin-bottom: 1.5cqw; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));">
+            <h1>SEMANTIC & SEO</h1>
+            <p class="subtitle" style="margin-top: 1cqw;">MODUL 5: ARSITEKTUR MODERN & META DATA</p>
+            <div class="terminal-box" style="margin-top: 2cqw; width: 65%; text-align: left;">
+                <p style="color: var(--accent-html); font-size: 1.2cqw;">> Menginisiasi protokol standardisasi web modern...<br>> Menerapkan optimasi visibilitas Search Engine...<br>> Status: Ready to build the Gold Standard.</p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SYSTEM_READY</div><div>01 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide2">
+        <div class="nav-btn-container"><a href="#slide1" class="nav-btn">&lt;</a><a href="#slide3" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ KNOWLEDGE_BASE: BAD_PRACTICES ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-02</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>01 //</span> Gejala "Div Soup"</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Dulu, developer merancang layout website dengan pakai <code>&lt;div&gt;</code> berulang-ulang untuk segala hal. (Disebut <b>Div Soup</b>).</p>
+                    <p class="desc">Bagi Google Bot, <code>&lt;div&gt;</code> tidak memiliki <b>arti</b> apa-apa selain kotak kosong. Mesin tidak tahu mana area menu atau konten utama.</p>
+                </div>
+                <div class="terminal-box" style="border-left-color: #ff3333;">
+                    <div class="terminal-header"><span style="color: #ff3333;">LEGACY_CODE_DETECTED</span></div>
+                    <div class="code-block" style="color: #ff9999;">
+                        <span style="color: var(--syn-comment);">&lt;!-- Mesin bingung bacanya --&gt;</span><br>
+                        &lt;div class="header"&gt;Logo&lt;/div&gt;<br>
+                        &lt;div class="main-content"&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="article"&gt;Isi&lt;/div&gt;<br>
+                        &lt;/div&gt;<br>
+                        &lt;div class="footer"&gt;Copyright&lt;/div&gt;
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>ANALYZING_LEGACY_STRUCTURE</div><div>02 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide3">
+        <div class="nav-btn-container"><a href="#slide2" class="nav-btn">&lt;</a><a href="#slide4" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ KNOWLEDGE_BASE: SEMANTICS ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-03</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>02 //</span> Apa itu Semantic HTML?</h2>
+            <p class="desc"><b>Semantic</b> berarti "makna". Tag Semantik adalah tag HTML yang namanya langsung menjelaskan <i>jenis konten</i> di dalamnya kepada browser.</p>
+            <div class="split-layout">
+                <div class="terminal-box" style="border-left-color: var(--text-muted);">
+                    <div class="terminal-header"><span style="color: var(--text-muted);">Non-Semantic (Tanpa Arti)</span></div>
+                    <p style="font-size: 1.15cqw; color: #fff;"><code>&lt;div&gt;</code> dan <code>&lt;span&gt;</code><br><br>Hanya memberi tahu browser <i>"Ini adalah sebuah wadah"</i>.</p>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--accent-html);">
+                    <div class="terminal-header"><span>Semantic (Punya Makna)</span></div>
+                    <p style="font-size: 1.15cqw; color: #fff;"><code>&lt;form&gt;</code>, <code>&lt;table&gt;</code>, <code>&lt;article&gt;</code><br><br>Menjelaskan <i>"Ini adalah area formulir, tabel, dan artikel berita."</i></p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SEMANTIC_ENGINE_ACTIVE</div><div>03 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide4">
+        <div class="nav-btn-container"><a href="#slide3" class="nav-btn">&lt;</a><a href="#slide5" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ ARCHITECTURE: MODERN_LAYOUT ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-04</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>03 //</span> Elemen Web Modern</h2>
+            <p class="desc">Gantikan `&lt;div id="header"&gt;` dengan Tag Semantik bawaan HTML5 berikut untuk kerangka website Anda:</p>
+            <div class="tiled-content">
+                <div class="tile">
+                    <h3 style="color: var(--accent-html);">&lt;header&gt;</h3>
+                    <p>Bagian atas halaman web. Berisi Logo atau form pencarian.</p>
+                </div>
+                <div class="tile">
+                    <h3 style="color: var(--accent-html);">&lt;nav&gt;</h3>
+                    <p>Wadah khusus untuk deret menu link navigasi utama.</p>
+                </div>
+                <div class="tile">
+                    <h3 style="color: var(--accent-html);">&lt;footer&gt;</h3>
+                    <p>Catatan kaki halaman. Berisi hak cipta & link sosial media.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>LAYOUT_TAGS_PARSED</div><div>04 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <div class="nav-btn-container"><a href="#slide4" class="nav-btn">&lt;</a><a href="#slide6" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ ARCHITECTURE: CONTENT_TAGS ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-05</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>04 //</span> Pembungkus Konten Inti</h2>
+            <div class="split-layout">
+                <div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 1cqw; border-left: 0.3cqw solid var(--accent-html); margin-bottom: 0.8cqw;">
+                        <h3 style="font-family: var(--font-title); font-size: 1.1cqw;">&lt;main&gt;</h3>
+                        <p style="font-size: 1.1cqw; color: var(--text-muted);">Konten inti paling penting. Hanya boleh ada SATU per halaman.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 1cqw; border-left: 0.3cqw solid var(--accent-green); margin-bottom: 0.8cqw;">
+                        <h3 style="font-family: var(--font-title); font-size: 1.1cqw;">&lt;section&gt;</h3>
+                        <p style="font-size: 1.1cqw; color: var(--text-muted);">Memecah `main` ke beberapa bagian (Section Layanan/Portfolio).</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 1cqw; border-left: 0.3cqw solid var(--accent-blue);">
+                        <h3 style="font-family: var(--font-title); font-size: 1.1cqw;">&lt;article&gt;</h3>
+                        <p style="font-size: 1.1cqw; color: var(--text-muted);">Konten mandiri utuh (Misal: Postingan Blog).</p>
+                    </div>
+                </div>
+                <div class="terminal-box" style="margin-bottom:0;">
+                    <div class="terminal-header"><span>MODERN SKELETON</span></div>
+                    <div class="code-block" style="margin-bottom:0;">
+                        <span style="color: var(--syn-tag);">&lt;body&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;header&gt;&lt;nav&gt;</span>...<span style="color: var(--syn-tag);">&lt;/nav&gt;&lt;/header&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;main&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;section&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;article&gt;</span> Post 1 <span style="color: var(--syn-tag);">&lt;/article&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/section&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;/main&gt;</span><br>
+                        &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;footer&gt;</span> Copy 2026 <span style="color: var(--syn-tag);">&lt;/footer&gt;</span><br>
+                        <span style="color: var(--syn-tag);">&lt;/body&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>CONTENT_BLOCKS_SECURED</div><div>05 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide6">
+        <div class="nav-btn-container"><a href="#slide5" class="nav-btn">&lt;</a><a href="#slide7" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ OPTIMIZATION: WHY_IT_MATTERS ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-06</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>05 //</span> Mengapa Semantic Penting?</h2>
+            <div class="split-layout">
+                <div class="terminal-box" style="margin-bottom:0;">
+                    <div class="terminal-header"><span>1. SEO (Search Engine Optimization)</span></div>
+                    <p style="font-size: 1.15cqw; color: #fff;">Google Bot mendeteksi tag `&lt;main&gt;` dan `&lt;article&gt;` untuk menentukan konten prioritas mana yang akan dinaikkan rankingnya ke Halaman Pertama Google.</p>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--accent-blue); margin-bottom:0;">
+                    <div class="terminal-header"><span style="color: var(--accent-blue);">2. Aksesibilitas (A11Y)</span></div>
+                    <p style="font-size: 1.15cqw; color: #fff;">Software pembaca layar tunanetra akan mendeteksi `&lt;nav&gt;` dan membacakannya, sehingga penyandang disabilitas bisa menggunakan web Anda.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SEARCH_INDEX_OPTIMIZED</div><div>06 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide7">
+        <div class="nav-btn-container"><a href="#slide6" class="nav-btn">&lt;</a><a href="#slide8" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ ARCHITECTURE: THE_BRAIN ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-07</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>06 //</span> Tag &lt;head&gt;: Otak Tersembunyi</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Konfigurasi krusial website tidak terjadi di area visual (body), melainkan di dalam tag <span class="highlight-box">&lt;head&gt;</span>.</p>
+                    <p class="desc">Area ini menampung <b>Metadata</b> ("data tentang data"). Ia memberitahu browser cara memuat halaman serta memberi info ke sosmed saat link web dibagikan.</p>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--text-muted);">
+                    <div class="terminal-header"><span style="color: var(--text-muted);">METADATA_INSPECTION</span></div>
+                    <ul style="padding-left: 2cqw; font-size: 1.15cqw; line-height: 2; color: #fff;">
+                        <li>Tidak merender elemen visual.</li>
+                        <li>Memuat font eksternal (Google Fonts).</li>
+                        <li>Menautkan file gaya/desain (CSS).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>HEAD_NODE_ACCESSED</div><div>07 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide8">
+        <div class="nav-btn-container"><a href="#slide7" class="nav-btn">&lt;</a><a href="#slide9" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ SYNTAX: META_TAGS ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-08</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>07 //</span> Meta Tags Wajib SEO</h2>
+            <p class="desc">Di dalam <code>&lt;head&gt;</code>, kita menanamkan tag tunggal <code>&lt;meta&gt;</code>. Berikut adalah 3 Meta Tag wajib web modern:</p>
+            <div class="code-block" style="margin-bottom:0;">
+                <span style="color: var(--syn-comment);">&lt;!-- 1. Mencegah karakter teks rusak --&gt;</span><br>
+                <span style="color: var(--syn-tag);">&lt;meta</span> <span style="color: var(--syn-attr);">charset</span>=<span style="color: var(--syn-string);">"UTF-8"</span><span style="color: var(--syn-tag);">&gt;</span><br><br>
+                
+                <span style="color: var(--syn-comment);">&lt;!-- 2. Wajib untuk Mobile Responsif --&gt;</span><br>
+                <span style="color: var(--syn-tag);">&lt;meta</span> <span style="color: var(--syn-attr);">name</span>=<span style="color: var(--syn-string);">"viewport"</span> <span style="color: var(--syn-attr);">content</span>=<span style="color: var(--syn-string);">"width=device-width, initial-scale=1.0"</span><span style="color: var(--syn-tag);">&gt;</span><br><br>
+
+                <span style="color: var(--syn-comment);">&lt;!-- 3. Teks deskripsi untuk pencarian Google --&gt;</span><br>
+                <span style="color: var(--syn-tag);">&lt;meta</span> <span style="color: var(--syn-attr);">name</span>=<span style="color: var(--syn-string);">"description"</span> <span style="color: var(--syn-attr);">content</span>=<span style="color: var(--syn-string);">"Situs belajar Courslan."</span><span style="color: var(--syn-tag);">&gt;</span>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>META_CRAWLING_ENABLED</div><div>08 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide9">
+        <div class="nav-btn-container"><a href="#slide8" class="nav-btn">&lt;</a><a href="#slide10" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ MODULE_SUMMARY ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-09</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Kesimpulan Modul 5</h2>
+            <div class="tiled-content">
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-ban icon"></i>
+                    <h3>Tinggalkan Div Soup</h3>
+                    <p>Hindari membuat layout dasar pakai `&lt;div&gt;` jika area tersebut punya arti spesifik.</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-brands fa-google icon"></i>
+                    <h3>Semantic = SEO</h3>
+                    <p>Tag `&lt;main&gt;` dan `&lt;article&gt;` adalah karpet merah bagi Google Bot untuk membaca konten Anda.</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-brain icon"></i>
+                    <h3>Otak di Head</h3>
+                    <p>Metadata mutlak diperlukan agar website Anda bersiap menjadi responsif via CSS.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>INTEGRITY_CHECK: PASS</div><div>09 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide10">
+        <div class="nav-btn-container"><a href="#slide9" class="nav-btn">&lt;</a><a href="#slide11" class="nav-btn">&gt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ PRACTICAL_LAB: LAB_EXE ]</div></div>
+            <div class="node-id">ARCHIVE: HTML-M5-10</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Micro-Lab 05: Gold Standard Skeleton</h2>
+            <div class="terminal-box" style="width: 100%;">
+                <div class="terminal-header"><span>💻 ACTION_REQUIRED: BUILD_SEMANTIC</span></div>
+                <p style="font-size: 1.25cqw; color: #fff; line-height: 1.8;">
+                    1. Buat file <span class="highlight-box">blog-final.html</span>.<br>
+                    2. Pada <code>&lt;head&gt;</code>, pastikan meta <b>charset</b> dan <b>viewport</b> sudah tertulis otomatis oleh Emmet.<br>
+                    3. Tambahkan <code>&lt;meta name="description"&gt;</code>.<br>
+                    4. Di <code>&lt;body&gt;</code>, buat struktur Semantik: Sebuah <b>&lt;header&gt;</b> dengan H1, <b>&lt;nav&gt;</b> dengan link list, sebuah <b>&lt;main&gt;</b> yang di dalamnya ada <b>&lt;article&gt;</b> berita, lalu tutup dengan <b>&lt;footer&gt;</b>.<br>
+                    5. Secara visual akan biasa saja, tapi Anda telah memprogram standar Google tingkat tinggi!
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>AWAITING_STUDENT_COMPILATION</div><div>10 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide11">
+        <div class="nav-btn-container" style="justify-content: flex-start;"><a href="#slide10" class="nav-btn">&lt;</a></div>
+        <div class="slide-header">
+            <div class="header-left"><img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan" class="header-logo"><div class="system-tag">[ SYSTEM: TRACK_COMPLETED ]</div></div>
+            <div class="node-id">NODE_ID: CSL-END-05</div>
+        </div>
+        <div class="content-area">
+            <div class="split-layout">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="width: 13cqw; height: 13cqw; border: 0.3cqw solid var(--accent-html); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 3cqw rgba(255, 215, 0, 0.2); background-color: #000;">
+                        <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" style="width: 70%; height: 70%; object-fit: contain; position: relative; z-index: 5;">
+                        <svg style="position: absolute; width: 16cqw; height: 16cqw; top: -1.8cqw; left: -1.8cqw; animation: cyber-spin 12s linear infinite; pointer-events: none; z-index: 2;" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="var(--accent-blue)" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.6"/>
+                            <circle cx="50" cy="2" r="3" fill="var(--accent-html)" />
+                            <circle cx="84" cy="84" r="1.5" fill="var(--accent-purple)" />
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-title); font-size: 1.6cqw; margin-top: 2cqw; color: #fff; text-shadow: 0 0 10px rgba(255,215,0,0.5);">HTML TRACK COMPLETE</h3>
+                    <p style="font-size: 1cqw; color: var(--accent-html); text-transform: uppercase; margin-top: 0.5cqw;">Styling Module Unlocked</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div style="margin-bottom: 1.5cqw;"><a href="#" class="cta-button">LANJUT KE KELAS CSS</a></div>
+                    <div class="terminal-box" style="margin: 0; width: 100%; border-left-color: var(--accent-green);">
+                        <div class="terminal-header" style="color: var(--accent-green); border-bottom-color: rgba(0,255,65,0.1);">
+                            <span>📡 SKELETON_STRUCTURE_LOG</span><span>STATUS: 100% SECURED</span>
+                        </div>
+                        <p style="color: #E0E0E0; font-size: 1.15cqw; line-height: 1.6;">
+                            Selamat! Anda resmi menamatkan fondasi kerangka web (HTML Track). Tulang punggung website Anda kini kokoh & optimal untuk SEO.<br><br>
+                            <span style="color: var(--accent-html); font-weight: bold;">[+] MILESTONE ACHIEVED:</span> Dari teks mentah hingga struktur semantik.<br>
+                            <span style="color: var(--accent-blue); font-weight: bold;">[+] NEXT DIRECTIVE:</span> Di tahap berikutnya, kita akan menyuntikkan keindahan visual dan desain menggunakan: <b>Cascading Style Sheets (CSS)</b>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <div><span class="status-blink" style="background:var(--accent-green);"></span><span style="color:var(--accent-green);">HTML_ENGINE_HALTED</span></div>
+            <div>11 / 11</div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

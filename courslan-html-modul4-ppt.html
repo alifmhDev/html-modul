@@ -1,0 +1,566 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courslan Academy: HTML Forms & Inputs (Modul 4)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. CORE PPT 16:9 ENGINE - ANTI-OVERFLOW SYSTEM */
+        :root {
+            --bg-color: #080808; 
+            --panel-bg: #121212;
+            --accent-green: #00FF41;
+            --accent-blue: #00CCFF;   
+            --accent-purple: #9900FF; 
+            --accent-html: #FF007F;   /* Interactive Neon Pink for Modul 4 */
+            --accent-dim: #33001a;    
+            --text-main: #F5F5F5; 
+            --text-muted: #B3B3B3; 
+            --font-title: 'Orbitron', sans-serif;
+            --font-code: 'Courier Prime', monospace;
+            
+            /* Syntax Highlighting */
+            --syn-tag: #569CD6;
+            --syn-attr: #9CDCFE;
+            --syn-string: #CE9178;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #111;
+            color: var(--text-main);
+            font-family: var(--font-code);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            max-width: calc(100vh * 16 / 9);
+            height: calc(100vw * 9 / 16);
+            max-height: 100vh;
+            container-type: inline-size;
+            overflow-x: auto;
+            display: flex;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .slide-container::-webkit-scrollbar { display: none; }
+
+        .slide {
+            min-width: 100cqw;
+            max-width: 100cqw;
+            height: 100%;
+            scroll-snap-align: start;
+            background-color: var(--bg-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 3cqw 5cqw; 
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 127, 0.02), rgba(0, 204, 255, 0.02));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* 2. TYPOGRAPHY & BRANDING */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--accent-html);
+            padding-bottom: 1cqw;
+            margin-bottom: 2cqw;
+            z-index: 2;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 1cqw; }
+        .header-logo { width: 3cqw; height: 3cqw; object-fit: contain; filter: drop-shadow(0 0 5px rgba(255, 0, 127, 0.4)); }
+
+        .system-tag { color: var(--accent-html); font-size: 1.1cqw; text-transform: uppercase; letter-spacing: 0.1cqw; font-weight: bold; }
+        .node-id { color: var(--text-muted); font-size: 1cqw; }
+
+        h1 { font-family: var(--font-title); font-size: 4.5cqw; font-weight: 900; color: var(--accent-html); text-shadow: 0 0 15px rgba(255, 0, 127, 0.3); line-height: 1.2; }
+        h2.slide-title { font-family: var(--font-title); font-size: 2.8cqw; margin-bottom: 1cqw; color: #fff; line-height: 1.2; border-left: 0.5cqw solid var(--accent-html); padding-left: 1.5cqw; }
+        h2.slide-title span { color: var(--accent-html); }
+        
+        .subtitle { font-size: 1.5cqw; color: var(--text-muted); letter-spacing: 0.2cqw; text-transform: uppercase; margin-bottom: 1.5cqw; }
+        p.desc { font-size: 1.35cqw; color: #E0E0E0; line-height: 1.7; margin-bottom: 1.5cqw; }
+
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 2; position: relative; }
+
+        /* 3. LAYOUTS */
+        .tiled-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2cqw; width: 100%; }
+        .tile { background-color: var(--panel-bg); border: 1px solid #222; padding: 2cqw; border-radius: 0.5cqw; transition: 0.3s; height: 100%; }
+        .tile:hover { border-color: var(--accent-html); box-shadow: 0 0 15px rgba(255, 0, 127, 0.1); transform: translateY(-0.3cqw); }
+        .tile .icon { font-size: 2.5cqw; color: var(--accent-html); margin-bottom: 1cqw; }
+        .tile h3 { font-family: var(--font-title); font-size: 1.3cqw; margin-bottom: 0.8cqw; color: #fff; }
+        .tile p { font-size: 1.15cqw; color: var(--text-muted); line-height: 1.5; }
+
+        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5cqw; align-items: center; }
+        
+        /* Terminal & Code Boxes */
+        .terminal-box { background-color: var(--panel-bg); border: 1px solid #222; border-left: 0.5cqw solid var(--accent-html); padding: 1.8cqw; border-radius: 0.5cqw; font-family: var(--font-code); line-height: 1.7; margin-bottom: 1.5cqw; }
+        .terminal-header { font-size: 1.1cqw; color: var(--accent-html); border-bottom: 1px solid rgba(255, 0, 127, 0.2); padding-bottom: 0.8cqw; margin-bottom: 1cqw; display: flex; justify-content: space-between; font-weight: bold; }
+        
+        .code-block { font-size: 1.1cqw; line-height: 1.6; background: #050505; padding: 1.5cqw; border-radius: 0.4cqw; border: 1px solid #222; overflow: hidden; margin-bottom: 1cqw;}
+
+        /* Form UI Mockup */
+        .mockup-form { background: rgba(255,255,255,0.02); border: 1px dashed #444; padding: 2cqw; border-radius: 0.5cqw; }
+        .mockup-input { display: block; width: 100%; background: #000; border: 1px solid #444; color: #fff; padding: 0.8cqw; margin-bottom: 1cqw; font-family: var(--font-code); font-size: 1cqw; }
+        .mockup-btn { background: var(--accent-html); color: #000; border: none; padding: 0.8cqw 2cqw; font-weight: bold; font-family: var(--font-title); cursor: pointer; }
+
+        /* 4. NAVIGATION & STATUS BAR */
+        .status-bar { border-top: 1px dashed #333; padding-top: 1.2cqw; margin-top: auto; display: flex; justify-content: space-between; font-size: 1.1cqw; color: var(--text-muted); text-transform: uppercase; z-index: 2; font-weight: bold; }
+        .status-blink { width: 0.8cqw; height: 0.8cqw; background: var(--accent-html); border-radius: 50%; animation: blink-status 1.5s infinite; display: inline-block; margin-right: 0.8cqw; }
+        @keyframes blink-status { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
+        .nav-btn-container { position: absolute; top: 50%; width: 100%; left: 0; display: flex; justify-content: space-between; padding: 0 1.5cqw; z-index: 100; pointer-events: none; transform: translateY(-50%); }
+        .nav-btn { background: rgba(10,10,10,0.9); color: var(--accent-html); border: 1px solid var(--accent-dim); padding: 1cqw 1.5cqw; pointer-events: auto; text-decoration: none; font-size: 1.5cqw; border-radius: 0.3cqw; transition: 0.3s; }
+        .nav-btn:hover { background: var(--accent-html); color: #000; box-shadow: 0 0 10px rgba(255, 0, 127, 0.4); }
+
+        /* 5. COMPONENTS */
+        .cta-button { display: inline-block; font-family: var(--font-title); border: 2px solid var(--accent-green); color: var(--accent-green); background: rgba(0, 255, 65, 0.05); padding: 1.5cqw 4cqw; font-size: 1.6cqw; font-weight: bold; text-decoration: none; border-radius: 0.4cqw; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); } 50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); } }
+
+        .highlight-box { color: var(--accent-html); background: rgba(255,0,127,0.1); padding: 0.1cqw 0.4cqw; border-radius: 0.2cqw; font-weight: bold; }
+
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: -1; }
+        .glitch-text::before { left: 1px; text-shadow: -1px 0 var(--accent-html); animation: glitch-anim-1 3s infinite linear alternate-reverse; }
+        .glitch-text::after { left: -1px; text-shadow: -1px 0 var(--accent-green); animation: glitch-anim-2 4s infinite linear alternate-reverse; }
+        @keyframes glitch-anim-1 { 0% { clip-path: inset(20% 0 80% 0); } 20% { clip-path: inset(60% 0 10% 0); } 40% { clip-path: inset(40% 0 50% 0); } 60% { clip-path: inset(80% 0 5% 0); } 80% { clip-path: inset(10% 0 70% 0); } 100% { clip-path: inset(30% 0 20% 0); } }
+        @keyframes glitch-anim-2 { 0% { clip-path: inset(10% 0 60% 0); } 20% { clip-path: inset(30% 0 20% 0); } 40% { clip-path: inset(70% 0 10% 0); } 60% { clip-path: inset(20% 0 50% 0); } 80% { clip-path: inset(50% 0 30% 0); } 100% { clip-path: inset(5% 0 80% 0); } }
+        
+        @keyframes cyber-spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <div class="slide" id="slide1">
+        <div class="nav-btn-container" style="justify-content: flex-end;">
+            <a href="#slide2" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ MODUL 4: USER_INPUT_DATA ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-01</div>
+        </div>
+        <div class="content-area" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+            
+            <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" style="width: 12cqw; height: 12cqw; object-fit: contain; margin-bottom: 1.5cqw; filter: drop-shadow(0 0 15px rgba(255, 0, 127, 0.4));">
+
+            <h1 class="glitch-text" data-text="FORMS & INPUTS">FORMS & INPUTS</h1>
+            <p style="font-size: 1.5cqw; color: var(--text-muted); margin-top: 1cqw; letter-spacing: 0.2cqw;">MODUL 4: PENGUMPULAN DATA PENGGUNA</p>
+            
+            <div class="terminal-box" style="margin-top: 3cqw; width: 65%; text-align: left; border-left-color: var(--accent-html);">
+                <p style="color: var(--accent-html); font-size: 1.3cqw; line-height: 1.8;">
+                    > Menginisiasi protokol komunikasi dua arah...<br>
+                    > Meretas cara browser menangkap & mengirim data formulir...<br>
+                    > Status: Ready to receive user transmission.
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SYSTEM_READY</div><div>01 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide2">
+        <div class="nav-btn-container">
+            <a href="#slide1" class="nav-btn">&lt;</a><a href="#slide3" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ KNOWLEDGE_BASE: TWO_WAY_COMM ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-02</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>01 //</span> Komunikasi Web Dua Arah</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Sejauh ini, kita membuat web statis (Informasi hanya mengalir satu arah: dari server ke pengguna).</p>
+                    <p class="desc">Untuk membangun fitur seperti **Login, Pendaftaran, atau Komentar**, website butuh alat untuk menangkap ketikan pengguna. Di sinilah <span class="highlight-box">HTML Forms</span> mengambil alih.</p>
+                </div>
+                <div class="terminal-box" style="border-left-color: var(--text-muted);">
+                    <div class="terminal-header"><span style="color: var(--text-muted);">NETWORK_TOPOLOGY</span><span style="color: var(--text-muted);">DATA_FLOW</span></div>
+                    <ul style="padding-left: 2cqw; font-size: 1.2cqw; line-height: 2; color: #fff;">
+                        <li><span style="color: var(--accent-html);">1. USER:</span> Mengisi data ke dalam kotak input.</li>
+                        <li><span style="color: var(--accent-green);">2. FORM:</span> Membungkus data ke dalam paket aman.</li>
+                        <li><span style="color: var(--accent-blue);">3. SERVER:</span> Menerima paket dan memprosesnya (Backend).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>INITIALIZING_INPUT_GATES</div><div>02 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide3">
+        <div class="nav-btn-container">
+            <a href="#slide2" class="nav-btn">&lt;</a><a href="#slide4" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ SYNTAX: FORM_WRAPPER ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-03</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>02 //</span> Anatomi Wadah &lt;form&gt;</h2>
+            <p class="desc">Tag <span class="highlight-box">&lt;form&gt;</span> adalah cangkang (wrapper) wajib untuk semua jenis inputan. Ia memiliki dua atribut krusial yang menentukan *ke mana* dan *bagaimana* data dikirim.</p>
+            
+            <div class="code-block">
+                <span style="color: var(--syn-tag);">&lt;form</span> 
+                <span style="color: var(--syn-attr);">action</span>=<span style="color: var(--syn-string);">"/proses_login.php"</span> 
+                <span style="color: var(--syn-attr);">method</span>=<span style="color: var(--syn-string);">"POST"</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                &nbsp;&nbsp;<span style="color: #6A9955;"></span><br>
+                <span style="color: var(--syn-tag);">&lt;/form&gt;</span>
+            </div>
+            
+            <div class="split-layout" style="margin-top: 1cqw;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1cqw; border: 1px solid #222; border-radius: 0.3cqw; font-size: 1.15cqw;">
+                    <b style="color: var(--accent-html);">action :</b> Alamat URL/File (biasanya Backend) yang akan memproses data tersebut.
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1cqw; border: 1px solid #222; border-radius: 0.3cqw; font-size: 1.15cqw;">
+                    <b style="color: var(--accent-html);">method :</b> Cara pengiriman. <b>GET</b> (data terlihat di URL, untuk pencarian) vs <b>POST</b> (data tersembunyi, untuk password).
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>WRAPPER_NODE_SECURED</div><div>03 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide4">
+        <div class="nav-btn-container">
+            <a href="#slide3" class="nav-btn">&lt;</a><a href="#slide5" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ SYNTAX: INPUT_TYPES ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-04</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>03 //</span> Varian Elemen &lt;input&gt;</h2>
+            <p class="desc">Tag <code>&lt;input&gt;</code> sangat ajaib. Hanya dengan mengganti atribut <span class="highlight-box">type</span>, ia bisa berubah wujud menjadi kotak teks, password, atau tanggal.</p>
+            
+            <div class="split-layout" style="grid-template-columns: 1.5fr 1fr;">
+                <div class="code-block" style="margin-bottom: 0;">
+                    <span style="color: #6A9955;"></span><br>
+                    <span style="color: var(--syn-tag);">&lt;input</span> <span style="color: var(--syn-attr);">type</span>=<span style="color: var(--syn-string);">"text"</span> <span style="color: var(--syn-attr);">placeholder</span>=<span style="color: var(--syn-string);">"Username"</span><span style="color: var(--syn-tag);">&gt;</span><br><br>
+                    <span style="color: #6A9955;"></span><br>
+                    <span style="color: var(--syn-tag);">&lt;input</span> <span style="color: var(--syn-attr);">type</span>=<span style="color: var(--syn-string);">"password"</span><span style="color: var(--syn-tag);">&gt;</span><br><br>
+                    <span style="color: #6A9955;"></span><br>
+                    <span style="color: var(--syn-tag);">&lt;input</span> <span style="color: var(--syn-attr);">type</span>=<span style="color: var(--syn-string);">"email"</span><span style="color: var(--syn-tag);">&gt;</span>
+                </div>
+                <div class="mockup-form">
+                    <span style="font-size: 1cqw; color: var(--text-muted);">Visualisasi Browser:</span>
+                    <input type="text" class="mockup-input" placeholder="Username" disabled>
+                    <input type="password" class="mockup-input" placeholder="••••••••" disabled>
+                    <input type="email" class="mockup-input" placeholder="user@courslan.com" disabled>
+                </div>
+            </div>
+            <p style="font-size: 1.1cqw; margin-top: 1cqw; color: var(--text-muted);">*Atribut <code>placeholder</code> digunakan untuk memberi teks panduan bayangan di dalam kotak input sebelum user mengetik.</p>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>INPUT_FIELDS_RENDERED</div><div>04 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <div class="nav-btn-container">
+            <a href="#slide4" class="nav-btn">&lt;</a><a href="#slide6" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ ACCESSIBILITY: LABELING ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-05</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>04 //</span> Pentingnya Tag &lt;label&gt;</h2>
+            <p class="desc">Jangan pernah meletakkan teks penamaan form tanpa tag <span class="highlight-box">&lt;label&gt;</span>. Label menghubungkan teks dengan kotak input, sehingga jika label diklik, kotak input akan otomatis aktif (fokus).</p>
+            
+            <div class="terminal-box">
+                <div class="terminal-header"><span>LINKING LABEL & INPUT</span></div>
+                <div class="code-block" style="margin-bottom: 0;">
+                    <span style="color: var(--syn-tag);">&lt;label</span> <span style="color: var(--syn-attr);">for</span>=<span style="color: var(--syn-string);">"namaDepan"</span><span style="color: var(--syn-tag);">&gt;</span>Nama Depan:<span style="color: var(--syn-tag);">&lt;/label&gt;</span><br>
+                    <span style="color: var(--syn-tag);">&lt;input</span> <span style="color: var(--syn-attr);">type</span>=<span style="color: var(--syn-string);">"text"</span> <span style="color: var(--syn-attr);">id</span>=<span style="color: var(--syn-string);">"namaDepan"</span> <span style="color: var(--syn-attr);">name</span>=<span style="color: var(--syn-string);">"nama"</span><span style="color: var(--syn-tag);">&gt;</span>
+                </div>
+            </div>
+            <ul style="list-style: none; font-size: 1.2cqw; line-height: 1.8; color: #E0E0E0;">
+                <li><i class="fa-solid fa-link" style="color: var(--accent-html); margin-right: 0.5cqw;"></i> Atribut <code>for</code> pada label harus sama persis dengan nilai atribut <code>id</code> pada input.</li>
+                <li><i class="fa-solid fa-database" style="color: var(--accent-html); margin-right: 0.5cqw;"></i> Atribut <code>name</code> adalah variabel wajib agar server Backend tahu nama data yang dikirim.</li>
+            </ul>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>A11Y_PROTOCOL_ACTIVE</div><div>05 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide6">
+        <div class="nav-btn-container">
+            <a href="#slide5" class="nav-btn">&lt;</a><a href="#slide7" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ SYNTAX: SELECTION_INPUTS ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-06</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>05 //</span> Opsi: Radio vs Checkbox</h2>
+            
+            <div class="split-layout">
+                <div class="terminal-box" style="margin-bottom: 0;">
+                    <div class="terminal-header"><span style="color: var(--accent-html);">RADIO (Pilih Salah Satu)</span></div>
+                    <p style="font-size: 1.1cqw; color: var(--text-muted); margin-bottom: 1cqw;">Cocok untuk Jenis Kelamin. Wajib menggunakan atribut <code>name</code> yang sama agar saling terkait.</p>
+                    <div class="code-block" style="font-size: 1cqw;">
+                        &lt;input type="radio" name="gender"&gt; Pria<br>
+                        &lt;input type="radio" name="gender"&gt; Wanita
+                    </div>
+                </div>
+                
+                <div class="terminal-box" style="margin-bottom: 0;">
+                    <div class="terminal-header"><span style="color: var(--accent-html);">CHECKBOX (Pilih Banyak)</span></div>
+                    <p style="font-size: 1.1cqw; color: var(--text-muted); margin-bottom: 1cqw;">Cocok untuk Hobi atau Syarat Ketentuan.</p>
+                    <div class="code-block" style="font-size: 1cqw;">
+                        &lt;input type="checkbox"&gt; Coding<br>
+                        &lt;input type="checkbox"&gt; Gaming
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 1.5cqw; background: rgba(255, 0, 127, 0.1); padding: 1cqw; border-left: 0.3cqw solid var(--accent-html); font-size: 1.1cqw;">
+                Fakta UX: Radio Button dinamakan berdasarkan tombol radio tape mobil lawas yang hanya mengizinkan satu tombol ditekan pada satu waktu.
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>TOGGLE_STATES_MAPPED</div><div>06 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide7">
+        <div class="nav-btn-container">
+            <a href="#slide6" class="nav-btn">&lt;</a><a href="#slide8" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ SYNTAX: DROPDOWN_MENU ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-07</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>06 //</span> Menu Dropdown &lt;select&gt;</h2>
+            <div class="split-layout">
+                <div>
+                    <p class="desc">Jika pilihan terlalu banyak (misal: Daftar Kota/Negara), jangan gunakan Radio Button karena akan menghabiskan ruang layar.</p>
+                    <p class="desc">Gunakan kombinasi tag pembungkus <span class="highlight-box">&lt;select&gt;</span> dan item list <span class="highlight-box">&lt;option&gt;</span> untuk menghemat ruang antarmuka.</p>
+                </div>
+                <div class="code-block">
+                    <span style="color: var(--syn-tag);">&lt;select</span> <span style="color: var(--syn-attr);">name</span>=<span style="color: var(--syn-string);">"kota"</span><span style="color: var(--syn-tag);">&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;option</span> <span style="color: var(--syn-attr);">value</span>=<span style="color: var(--syn-string);">"jkt"</span><span style="color: var(--syn-tag);">&gt;</span>Jakarta<span style="color: var(--syn-tag);">&lt;/option&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;option</span> <span style="color: var(--syn-attr);">value</span>=<span style="color: var(--syn-string);">"bdg"</span><span style="color: var(--syn-tag);">&gt;</span>Bandung<span style="color: var(--syn-tag);">&lt;/option&gt;</span><br>
+                    &nbsp;&nbsp;<span style="color: var(--syn-tag);">&lt;option</span> <span style="color: var(--syn-attr);">value</span>=<span style="color: var(--syn-string);">"sby"</span><span style="color: var(--syn-tag);">&gt;</span>Surabaya<span style="color: var(--syn-tag);">&lt;/option&gt;</span><br>
+                    <span style="color: var(--syn-tag);">&lt;/select&gt;</span>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>DROPDOWN_LOGIC_COMPILED</div><div>07 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide8">
+        <div class="nav-btn-container">
+            <a href="#slide7" class="nav-btn">&lt;</a><a href="#slide9" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ SYNTAX: SUBMISSION_CORE ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-08</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title"><span>07 //</span> Teks Panjang & Tombol Aksi</h2>
+            <div class="split-layout">
+                <div class="terminal-box" style="margin-bottom:0;">
+                    <div class="terminal-header"><span>&lt;textarea&gt;</span></div>
+                    <p style="font-size: 1.1cqw; color: var(--text-muted); margin-bottom: 1cqw;">Untuk menampung inputan pesan, alamat, atau teks berbaris ganda (multi-line). Berbeda dengan `input`, ia punya tag penutup.</p>
+                    <div class="code-block" style="font-size: 1.1cqw; margin-bottom:0;">
+                        <span style="color: var(--syn-tag);">&lt;textarea</span> <span style="color: var(--syn-attr);">rows</span>=<span style="color: var(--syn-string);">"4"</span><span style="color: var(--syn-tag);">&gt;&lt;/textarea&gt;</span>
+                    </div>
+                </div>
+                
+                <div class="terminal-box" style="border-left-color: var(--accent-green); margin-bottom:0;">
+                    <div class="terminal-header"><span style="color: var(--accent-green);">&lt;button&gt;</span></div>
+                    <p style="font-size: 1.1cqw; color: var(--text-muted); margin-bottom: 1cqw;">Triger eksekusi form. Gunakan atribut <code>type="submit"</code> agar seluruh data dikemas dan dikirim ke Action URL.</p>
+                    <div class="code-block" style="font-size: 1.1cqw; margin-bottom:0;">
+                        <span style="color: var(--syn-tag);">&lt;button</span> <span style="color: var(--syn-attr);">type</span>=<span style="color: var(--syn-string);">"submit"</span><span style="color: var(--syn-tag);">&gt;</span>KIRIM<span style="color: var(--syn-tag);">&lt;/button&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>SUBMISSION_TRIGGER_READY</div><div>08 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide9">
+        <div class="nav-btn-container">
+            <a href="#slide8" class="nav-btn">&lt;</a><a href="#slide10" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ MODULE_SUMMARY ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-09</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Kesimpulan Modul 4</h2>
+            <div class="tiled-content">
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-server icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Gerbang Interaksi</h3>
+                    <p style="font-size: 1.15cqw;">Form adalah jembatan komunikasi di mana web tidak lagi statis, melainkan menerima data nyata dari pengguna.</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-keyboard icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Varian Input</h3>
+                    <p style="font-size: 1.15cqw;">Hanya dengan memanipulasi atribut `type` pada tag `&lt;input&gt;`, browser memvalidasi data seperti email/password otomatis.</p>
+                </div>
+                <div class="tile" style="text-align: center;">
+                    <i class="fa-solid fa-universal-access icon" style="font-size: 4cqw;"></i>
+                    <h3 style="margin-top: 1cqw;">Aksesibilitas Label</h3>
+                    <p style="font-size: 1.15cqw;">Menghubungkan atribut `for` pada Label dengan atribut `id` pada Input merupakan standar UX profesional.</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>DATA_INTEGRITY_CHECK: PASS</div><div>09 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide10">
+        <div class="nav-btn-container">
+            <a href="#slide9" class="nav-btn">&lt;</a><a href="#slide11" class="nav-btn">&gt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ PRACTICAL_LAB: LAB_EXE ]</div>
+            </div>
+            <div class="node-id">ARCHIVE: HTML-M4-10</div>
+        </div>
+        <div class="content-area">
+            <h2 class="slide-title">Micro-Lab 04: Form Pendaftaran</h2>
+            <div class="terminal-box" style="width: 100%; border-left-color: var(--accent-html);">
+                <div class="terminal-header" style="color: var(--accent-html); border-bottom-color: rgba(255, 0, 127, 0.2);">
+                    <span>💻 INTERACTIVE_LAB: BUILD_USER_FORM</span>
+                </div>
+                <p style="font-size: 1.3cqw; color: #fff; line-height: 1.8;">
+                    1. Buat berkas koding baru: <span class="highlight-box">daftar.html</span>.<br>
+                    2. Sisipkan tag <code>&lt;form&gt;</code> (metode biarkan kosong sementara).<br>
+                    3. Buat input tipe <b>text</b> untuk Username, lengkap dengan tag <code>&lt;label&gt;</code>.<br>
+                    4. Buat input tipe <b>password</b> untuk Sandi Rahasia.<br>
+                    5. Tambahkan <b>Dropdown (Select)</b> untuk memilih Bidang Minat (Web Dev, Cyber, dll).<br>
+                    6. Akhiri formulir dengan sebuah <code>&lt;button type="submit"&gt;</code> Daftar Sekarang.<br>
+                    7. Jalankan di browser dan pastikan mengklik tulisan label bisa mengaktifkan input box-nya.
+                </p>
+            </div>
+        </div>
+        <div class="status-bar"><div><span class="status-blink"></span>AWAITING_STUDENT_COMPILATION</div><div>10 / 11</div></div>
+    </div>
+
+    <div class="slide" id="slide11">
+        <div class="nav-btn-container" style="justify-content: flex-start;">
+            <a href="#slide10" class="nav-btn">&lt;</a>
+        </div>
+        <div class="slide-header">
+            <div class="header-left">
+                <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" class="header-logo">
+                <div class="system-tag">[ SYSTEM: MODULE_COMPLETED ]</div>
+            </div>
+            <div class="node-id">NODE_ID: CSL-END-04</div>
+        </div>
+        
+        <div class="content-area">
+            <div class="split-layout">
+                
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="width: 14cqw; height: 14cqw; border: 0.3cqw solid var(--accent-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 3cqw rgba(0, 204, 255, 0.2); background-color: #000; overflow: visible;">
+                        <img src="photo_6145671672128803241_y-removebg-preview.png" alt="Courslan Logo" style="width: 70%; height: 70%; object-fit: contain; position: relative; z-index: 5;">
+                        <svg style="position: absolute; width: 17.5cqw; height: 17.5cqw; top: -2cqw; left: -2cqw; animation: cyber-spin 12s linear infinite; pointer-events: none; z-index: 2;" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="var(--accent-purple)" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.6"/>
+                            <circle cx="50" cy="2" r="3" fill="var(--accent-blue)" />
+                            <circle cx="84" cy="84" r="1.5" fill="var(--accent-html)" />
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-title); font-size: 2cqw; margin-top: 2.5cqw; letter-spacing: 0.1cqw; color: #fff;">MODULE 04 COMPLETE</h3>
+                    <p style="font-size: 1.1cqw; color: var(--accent-html); text-transform: uppercase; margin-top: 0.5cqw; letter-spacing: 0.2cqw;">Interaction Node Locked</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div style="text-align: left; margin-bottom: 1.5cqw;">
+                        <a href="#" class="cta-button" style="padding: 1.2cqw 3cqw; font-size: 1.4cqw;">LANJUT KE MODUL 5</a>
+                    </div>
+                    
+                    <div class="terminal-box" style="margin-top: 0; margin-bottom: 0; width: 100%; border-left-color: var(--accent-green); padding: 2cqw;">
+                        <div class="terminal-header" style="color: var(--accent-green); border-bottom-color: rgba(0,255,65,0.1); padding-bottom: 0.8cqw; margin-bottom: 1cqw;">
+                            <span>📡 DATA_STRUCTURE_LOG</span>
+                            <span>STATUS: SUCCESS</span>
+                        </div>
+                        <p style="color: #E0E0E0; font-size: 1.15cqw; line-height: 1.6; font-family: var(--font-code);">
+                            Kinerja brilian! Anda telah berhasil menembus logika komunikasi dua arah web. Server kini siap menerima ketikan perintah dari user di sisi depan (Frontend).<br><br>
+                            <span style="color: var(--accent-green); font-weight: bold;">[+] ASSIGNMENT:</span> Pastikan seluruh form input (Teks, Password, Select, Button) di Micro-Lab 04 sudah tampil di layar lokal Anda.<br>
+                            <span style="color: var(--accent-html); font-weight: bold;">[+] STANDBY:</span> Di tahap terakhir HTML (Modul 5), kita akan merombak total kode usang menjadi <b>Arsitektur Semantic Modern</b> agar web Anda dicintai oleh Google Bot SEO.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="status-bar">
+            <div style="display: flex; align-items: center; gap: 1cqw;">
+                <div class="status-blink" style="background-color: var(--accent-green);"></div>
+                <span style="color: var(--accent-green);">PROGRESS_SAVED // INTERACTIVE_GATES_OPEN</span>
+            </div>
+            <div>11 / 11</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* Security patch for anchor navigation */
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+
+</body>
+</html>
